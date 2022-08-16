@@ -17,7 +17,6 @@ namespace Codefy\Domain\EventSourcing;
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\Metadata;
 use DateTimeInterface;
-use JetBrains\PhpStorm\ArrayShape;
 use Qubus\Support\DateTime\QubusDateTimeImmutable;
 use Qubus\Support\DateTime\QubusDateTimeZone;
 
@@ -39,7 +38,7 @@ abstract class AggregateChanged implements DomainEvent
         $this->metadata = $metadata;
 
         $this->setAggregateId(aggregateId: $aggregateId);
-        $this->setVersion(version: $metadata[Metadata::AGGREGATE_VERSION] ?? 1);
+        $this->setPlayhead(playhead: $metadata[Metadata::AGGREGATE_PLAYHEAD] ?? 1);
         $this->setPayload(payload: $payload);
         $this->setEventId(eventId: $metadata[Metadata::EVENT_ID] ?? new EventId());
         $this->setEventType(
@@ -117,9 +116,9 @@ abstract class AggregateChanged implements DomainEvent
     /**
      * Aggregate version.
      */
-    public function aggregateVersion(): int
+    public function playhead(): int
     {
-        return $this->metadata[Metadata::AGGREGATE_VERSION];
+        return $this->metadata[Metadata::AGGREGATE_PLAYHEAD];
     }
 
     /**
@@ -135,16 +134,6 @@ abstract class AggregateChanged implements DomainEvent
      *
      * @return array
      */
-    #[ArrayShape(
-        [
-            'eventId' => "string|EventId",
-            'eventType' => "string",
-            'recordedAt' => "string|DateTimeInterface",
-            'metadata' => "array|null",
-            'payload' => "array|null",
-        ]
-    )
-    ]
     public function toArray(): array
     {
         return [
@@ -197,10 +186,10 @@ abstract class AggregateChanged implements DomainEvent
     /**
      * Append event version.
      */
-    public function withVersion(int $version): self
+    public function withPlayhead(int $playhead): self
     {
         $event = clone $this;
-        $event->setVersion(version: $version);
+        $event->setPlayhead(playhead: $playhead);
 
         return $event;
     }
@@ -220,9 +209,9 @@ abstract class AggregateChanged implements DomainEvent
         $this->metadata[Metadata::AGGREGATE_ID] = $aggregateId;
     }
 
-    private function setVersion(int $version): void
+    private function setPlayhead(int $playhead): void
     {
-        $this->metadata[Metadata::AGGREGATE_VERSION] = $version;
+        $this->metadata[Metadata::AGGREGATE_PLAYHEAD] = $playhead;
     }
 
     private function setPayload(?array $payload): void

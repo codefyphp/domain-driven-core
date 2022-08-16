@@ -37,12 +37,12 @@ interface DomainEvent
     /**
      * Append event version.
      */
-    public function withVersion(int $version): self;
+    public function withPlayhead(int $playhead): self;
 
     /**
      * Version of the recorded event.
      *
      * @return int
      */
-    public function aggregateVersion(): int;
+    public function playhead(): int;
 }

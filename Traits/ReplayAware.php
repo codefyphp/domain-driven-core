@@ -23,7 +23,7 @@ trait ReplayAware
     {
         foreach ($history as $event) {
             /** @var DomainEvent $event */
-            $this->aggregateVersion = $event->aggregateVersion() ?? $this->aggregateRootVersion() + 1;
+            $this->playhead = $event->playhead() ?? $this->playhead() + 1;
             $this->applyThat($event);
         }
     }

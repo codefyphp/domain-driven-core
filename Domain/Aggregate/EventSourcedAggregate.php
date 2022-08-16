@@ -55,7 +55,6 @@ abstract class EventSourcedAggregate implements AggregateRoot, EventSourcing
     /**
      * {@inheritDoc}
      *
-     * @throws TypeException
      */
     public function getRecordedEvents(): DomainEvents
     {
@@ -74,13 +73,13 @@ abstract class EventSourcedAggregate implements AggregateRoot, EventSourcing
         return $this->aggregateId;
     }
 
-    public function aggregateRootVersion(): int
+    public function playhead(): int
     {
-        return $this->aggregateVersion;
+        return $this->playhead;
     }
 
     /** {@inheritDoc} */
-    public static function reconstitute(EventStream $aggregateHistory): RecordsEvents
+    public static function reconstituteFromEventStream(EventStream $aggregateHistory): RecordsEvents
     {
         $instance = new static(aggregateId: $aggregateHistory->aggregateId());
         $instance->replay(history: $aggregateHistory);

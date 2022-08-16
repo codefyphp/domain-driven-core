@@ -19,5 +19,5 @@ interface EventSourcing
     /**
      * Reconstitutes an Aggregate instance from its history of domain events.
      */
-    public static function reconstitute(EventStream $aggregateHistory): RecordsEvents;
+    public static function reconstituteFromEventStream(EventStream $aggregateHistory): RecordsEvents;
 }

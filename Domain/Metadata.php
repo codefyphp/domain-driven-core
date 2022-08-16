@@ -27,5 +27,5 @@ interface Metadata
     /** @var string Name of the aggregate. Usually class name. */
     public const AGGREGATE_TYPE = '__aggregate_type';
     /** @var int The version number of the aggregate. */
-    public const AGGREGATE_VERSION = '__aggregate_version';
+    public const AGGREGATE_PLAYHEAD = '__aggregate_playhead';
 }

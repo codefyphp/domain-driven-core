@@ -18,7 +18,7 @@ use Codefy\Domain\EventSourcing\DomainEvent;
 
 trait EventProducerAware
 {
-    protected int $aggregateVersion = 0;
+    protected int $playhead = 0;
 
     /** @var array $recordedEvents */
     protected array $recordedEvents = [];
@@ -28,9 +28,9 @@ trait EventProducerAware
      */
     protected function recordThat(DomainEvent $event): void
     {
-        $this->aggregateVersion += 1;
+        $this->playhead += 1;
 
-        $this->recordedEvents[] = $event->withVersion($this->aggregateVersion);
+        $this->recordedEvents[] = $event->withPlayhead($this->playhead);
 
         $this->when($event);
     }
