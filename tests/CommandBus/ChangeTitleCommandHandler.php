@@ -34,7 +34,9 @@ class ChangeTitleCommandHandler
      */
     public function handle(TitleWasChanged $command): void
     {
-        $post = Post::fromNative(postId: $command->postId());
+        $post = $this->aggregateRepository->find(
+            PostId::fromString(postId: $command->postId()->__toString())
+        );
         $post->changeTitle(title: $command->title());
 
         $this->aggregateRepository->save(aggregate: $post);
