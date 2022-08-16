@@ -15,10 +15,10 @@ declare(strict_types=1);
 
 namespace Codefy\Traits;
 
-trait ConvertToArray
+trait ConvertToArrayAware
 {
     public function toArray(): array
     {
-        return (array) $this;
+        return (array)$this;
     }
 }
