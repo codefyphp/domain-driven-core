@@ -45,4 +45,20 @@ final class InMemoryEventStore implements EventStore
             )
         );
     }
+
+    /**
+     * @throws CorruptEventStreamException
+     */
+    public function loadFromPlayhead(AggregateId $aggregateId, int $playhead): EventStream
+    {
+        return new EventStream(
+            aggregateId: $aggregateId,
+            events: array_filter(
+                array: $this->events,
+                callback: function (DomainEvent $event) use ($aggregateId, $playhead) {
+                    return $event->aggregateId()->equals($aggregateId) && $playhead <= $event->playhead();
+                }
+            )
+        );
+    }
 }

@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\EventSourcing;
 
+use Codefy\Domain\Aggregate\CorruptEventStreamException;
 use Codefy\Domain\Aggregate\EventStream;
 use Codefy\Domain\Aggregate\AggregateId;
 
@@ -39,4 +40,9 @@ interface EventStore
      * @return EventStream
      */
     public function getAggregateHistoryFor(AggregateId $aggregateId): EventStream;
+
+    /**
+     * @throws CorruptEventStreamException
+     */
+    public function loadFromPlayhead(AggregateId $aggregateId, int $playhead): EventStream;
 }
