@@ -18,6 +18,6 @@ namespace Codefy\Domain\Aggregate;
 use Codefy\Domain\EventSourcing\EventSourcingException;
 use Qubus\Exception\Exception;
 
-final class AggregateRootNotFoundException extends Exception implements EventSourcingException
+final class AggregateNotFoundException extends Exception implements EventSourcingException
 {
 }
