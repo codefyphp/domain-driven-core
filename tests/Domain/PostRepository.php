@@ -33,7 +33,7 @@ final class PostRepository implements AggregateRepository
     public function find(AggregateId $aggregateId): RecordsEvents
     {
         $aggregateHistory = $this->eventStore->getAggregateHistoryFor(aggregateId: $aggregateId);
-        return Post::reconstitute(aggregateHistory: $aggregateHistory);
+        return Post::reconstituteFromEventStream(aggregateHistory: $aggregateHistory);
     }
 
     /** {@inheritDoc} */

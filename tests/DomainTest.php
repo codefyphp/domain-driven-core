@@ -20,14 +20,12 @@ use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\EventId;
 use Codefy\Domain\EventSourcing\InMemoryEventStore;
 use Codefy\Domain\Metadata;
-use Codefy\EventBus\GenericPublisher;
 use Codefy\Tests\Domain\Content;
 use Codefy\Tests\Domain\InMemoryPostProjection;
 use Codefy\Tests\Domain\Post;
 use Codefy\Tests\Domain\PostFactory;
 use Codefy\Tests\Domain\PostId;
 use Codefy\Tests\Domain\PostRepository;
-use Codefy\Tests\Domain\PostSubscriber;
 use Codefy\Tests\Domain\PostWasCreated;
 use Codefy\Tests\Domain\Title;
 use Codefy\Tests\Domain\TitleWasChanged;
@@ -71,7 +69,7 @@ $eventFromArray = TitleWasChanged::fromArray(
         'recordedAt' => new QubusDateTimeImmutable(time: 'now', tz: new QubusDateTimeZone(timezone: 'UTC')),
     ]
 )
-    ->withVersion(version: 5);
+    ->withPlayhead(playhead: 5);
 
 it(description: 'should be an instance of AggregateId.', closure: function () use ($postId) {
     Assert::assertInstanceOf(expected: AggregateId::class, actual: $postId);
@@ -131,7 +129,7 @@ it('should have recorded 2 events.', function () {
     $events = $post->getRecordedEvents();
 
     expect(value: PostId::fromString('760b7c16-b28e-4d31-9f93-7a2f0d3a1c51'))->toEqual(expected: $post->aggregateId())
-        ->and(value: 2)->toEqual(expected: $post->aggregateRootVersion());
+        ->and(value: 2)->toEqual(expected: $post->playhead());
     Assert::assertCount(expectedCount: 2, haystack: $events);
 });
 
@@ -149,7 +147,7 @@ it('should be the same after reconstitution.', function () {
     $events = $post->getRecordedEvents();
     $post->clearRecordedEvents();
 
-    $reconstitutedPost = Post::reconstitute(
+    $reconstitutedPost = Post::reconstituteFromEventStream(
         aggregateHistory: new EventStream(
             aggregateId: $postId,
             events: iterator_to_array(
@@ -173,7 +171,7 @@ it('should behave the same after reconstitution.', function () {
     $history = $post->getRecordedEvents();
     $post->clearRecordedEvents();
 
-    $reconstitutedPost = Post::reconstitute(
+    $reconstitutedPost = Post::reconstituteFromEventStream(
         aggregateHistory: new EventStream(
             aggregateId: $postId,
             events: iterator_to_array(
@@ -246,8 +244,8 @@ it('should be the same Post object when using PostFactory.', function () {
 it('should return domain event with data.', function () use ($eventWithData, $eventId) {
     expect(value: $eventWithData->eventType())->toEqual(expected: 'title-was-changed')
         ->and(value: $eventWithData->metaParam(name: '__event_type'))->toEqual(expected: 'title-was-changed')
-        ->and(value: $eventWithData->aggregateVersion())->toEqual(expected: 1)
-        ->and(value: $eventWithData->metaParam(name: '__aggregate_version'))->toEqual(expected: 1)
+        ->and(value: $eventWithData->playhead())->toEqual(expected: 1)
+        ->and(value: $eventWithData->metaParam(name: '__aggregate_playhead'))->toEqual(expected: 1)
         ->and(value: 'post')->toEqual(expected: $eventWithData->metaParam(name: '__aggregate_type'))
         ->and(value: $eventWithData->aggregateId()->__toString())->toEqual(
             expected: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f'
@@ -271,7 +269,7 @@ it('should return domain event with data.', function () use ($eventWithData, $ev
 
 it('should return domain event from array.', function () use ($eventFromArray, $eventId) {
     expect(value: $eventFromArray->eventType())->toEqual(expected: 'title-was-changed')
-        ->and(value: $eventFromArray->aggregateVersion())->toEqual(expected: 5)
+        ->and(value: $eventFromArray->playhead())->toEqual(expected: 5)
         ->and(value: $eventFromArray->aggregateId()->__toString())->toEqual(
             expected: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f'
         )
@@ -292,7 +290,7 @@ it('should return domain event from array.', function () use ($eventFromArray, $
                 ],
                 'metadata' => [
                     '__aggregate_id' => new PostId(value: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f'),
-                    '__aggregate_version' => 5,
+                    '__aggregate_playhead' => 5,
                     '__event_id' => new EventId(value: $eventId->__toString()),
                     '__event_type' => 'title-was-changed',
                     '__aggregate_type' => 'post',
@@ -319,8 +317,8 @@ it('should return `__aggregate_type` value: post.', function () use ($eventFromA
     );
 });
 
-it('should return `__aggregate_version` value: 1.', function () use ($eventFromArray) {
-    expect(value: $eventFromArray->metaParam(name: '__aggregate_version'))->toEqual(
+it('should return `__aggregate_playhead` value: 1.', function () use ($eventFromArray) {
+    expect(value: $eventFromArray->metaParam(name: '__aggregate_playhead'))->toEqual(
         expected: 5
     );
 });

@@ -33,7 +33,7 @@ final class InMemoryPostProjection extends BaseProjection implements PostProject
             'eventId' => $event->eventId(),
             'aggregateId' => $event->aggregateId(),
             'eventType' => $event->eventType(),
-            'playhead' => $event->aggregateVersion(),
+            'playhead' => $event->playhead(),
             'payload' => json_encode(value: $event->payload(), flags: JSON_PRETTY_PRINT),
             'metadata' => json_encode(value: $event->metadata(), flags: JSON_PRETTY_PRINT),
             'recordedAt' => $event->recordedAt()
@@ -47,7 +47,7 @@ final class InMemoryPostProjection extends BaseProjection implements PostProject
             'eventId' => $event->eventId(),
             'aggregateId' => $event->aggregateId(),
             'eventType' => $event->eventType(),
-            'playhead' => $event->aggregateVersion(),
+            'playhead' => $event->playhead(),
             'payload' => json_encode(value: $event->payload(), flags: JSON_PRETTY_PRINT),
             'metadata' => json_encode(value: $event->metadata(), flags: JSON_PRETTY_PRINT),
             'recordedAt' => $event->recordedAt()
