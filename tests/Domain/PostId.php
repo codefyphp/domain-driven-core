@@ -27,4 +27,9 @@ final class PostId extends Uuid implements AggregateId
     {
         return new self(value: $postId);
     }
+
+    public function aggregateClassName(): string
+    {
+        return Post::className();
+    }
 }

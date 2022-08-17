@@ -17,35 +17,59 @@ namespace Codefy\Tests\Domain;
 
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\Aggregate\AggregateRepository;
+use Codefy\Domain\Aggregate\EventSourcedAggregate;
+use Codefy\Domain\Aggregate\EventSourcedAggregateRepository;
+use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
 use Codefy\Domain\Aggregate\RecordsEvents;
 use Codefy\Domain\EventSourcing\EventStore;
 use Codefy\Domain\EventSourcing\Projection;
+use Codefy\EventBus\EventBus;
+use Codefy\Traits\IdentityMapAware;
 
 final class PostRepository implements AggregateRepository
 {
+    use IdentityMapAware;
+
     public function __construct(
         public readonly EventStore $eventStore,
-        public readonly Projection $projection
+        public readonly Projection $projection,
     ) {
     }
 
-    /** {@inheritDoc} */
-    public function find(AggregateId $aggregateId): RecordsEvents
+    /**
+     * {@inheritDoc}
+     * @throws MultipleInstancesOfAggregateDetectedException
+     */
+    public function loadAggregateRoot(AggregateId $aggregateId): RecordsEvents|null
     {
+        $this->retrieveFromIdentityMap($aggregateId);
+
         $aggregateHistory = $this->eventStore->getAggregateHistoryFor(aggregateId: $aggregateId);
-        return Post::reconstituteFromEventStream(aggregateHistory: $aggregateHistory);
+        $eventSourcedAggregate = Post::reconstituteFromEventStream(
+            aggregateHistory: $aggregateHistory
+        );
+
+        $this->attachToIdentityMap($eventSourcedAggregate);
+
+        return $eventSourcedAggregate;
     }
 
-    /** {@inheritDoc} */
-    public function save(RecordsEvents $aggregate): void
+    /**
+     * {@inheritDoc}
+     */
+    public function saveAggregateRoot(RecordsEvents $aggregate): void
     {
         $events = $aggregate->getRecordedEvents();
+
+        $this->attachToIdentityMap($aggregate);
 
         foreach ($events as $event) {
             $this->eventStore->append(event: $event);
         }
+        $this->projection->project($events);
+
         $aggregate->clearRecordedEvents();
 
-        $this->projection->project(events: $events);
+        $this->removeFromIdentityMap($aggregate);
     }
 }

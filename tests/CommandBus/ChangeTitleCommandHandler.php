@@ -15,11 +15,10 @@ declare(strict_types=1);
 
 namespace Codefy\Tests\CommandBus;
 
+use Codefy\Domain\Aggregate\AggregateNotFoundException;
 use Codefy\Domain\Aggregate\AggregateRepository;
-use Codefy\Tests\Domain\Content;
-use Codefy\Tests\Domain\Post;
+use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
 use Codefy\Tests\Domain\PostId;
-use Codefy\Tests\Domain\Title;
 use Codefy\Tests\Domain\TitleWasChanged;
 use Qubus\Exception\Data\TypeException;
 
@@ -31,14 +30,16 @@ class ChangeTitleCommandHandler
 
     /**
      * @throws TypeException
+     * @throws AggregateNotFoundException
+     * @throws MultipleInstancesOfAggregateDetectedException
      */
     public function handle(TitleWasChanged $command): void
     {
-        $post = $this->aggregateRepository->find(
+        $post = $this->aggregateRepository->loadAggregateRoot(
             PostId::fromString(postId: $command->postId()->__toString())
         );
         $post->changeTitle(title: $command->title());
 
-        $this->aggregateRepository->save(aggregate: $post);
+        $this->aggregateRepository->saveAggregateRoot(aggregate: $post);
     }
 }

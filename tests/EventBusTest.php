@@ -21,7 +21,7 @@ use Codefy\CommandBus\Containers\ContainerFactory;
 use Codefy\CommandBus\Odin;
 use Codefy\CommandBus\Resolvers\NativeCommandHandlerResolver;
 use Codefy\Tests\CommandBus\CreatePostCommand;
-use Codefy\Tests\CommandBus\PostEventBusCommandHandler;
+use Codefy\Tests\CommandBus\CreatePostEventBusCommandHandler;
 
 $resolver = new NativeCommandHandlerResolver(container: ContainerFactory::make(config: $config['container']));
 
@@ -30,7 +30,7 @@ it('should fire the event bus handler attached by string.', function () use ($co
 
     $resolver->bindHandler(
         commandName: CreatePostCommand::class,
-        handler: PostEventBusCommandHandler::class
+        handler: CreatePostEventBusCommandHandler::class
     );
 
     $odin = new Odin(bus: new SynchronousCommandBus(resolver: $resolver));

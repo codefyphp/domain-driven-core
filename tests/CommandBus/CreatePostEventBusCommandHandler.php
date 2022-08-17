@@ -24,7 +24,7 @@ use Codefy\Tests\Domain\PostSubscriber;
 use Codefy\Tests\Domain\Title;
 use Qubus\Exception\Data\TypeException;
 
-class PostEventBusCommandHandler
+class CreatePostEventBusCommandHandler
 {
     public function __construct(public readonly EventBus $eventBus)
     {

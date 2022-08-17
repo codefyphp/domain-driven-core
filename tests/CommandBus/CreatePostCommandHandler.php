@@ -18,6 +18,7 @@ namespace Codefy\Tests\CommandBus;
 use Codefy\CommandBus\Command;
 use Codefy\CommandBus\CommandHandler;
 use Codefy\Domain\Aggregate\AggregateRepository;
+use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
 use Codefy\Tests\Domain\Content;
 use Codefy\Tests\Domain\Post;
 use Codefy\Tests\Domain\PostId;
@@ -32,6 +33,7 @@ class CreatePostCommandHandler implements CommandHandler
 
     /**
      * @throws TypeException
+     * @throws MultipleInstancesOfAggregateDetectedException
      */
     public function handle(Command $command)
     {
@@ -41,6 +43,6 @@ class CreatePostCommandHandler implements CommandHandler
             content: new Content($command->content())
         );
 
-        $this->aggregateRepository->save(aggregate: $post);
+        $this->aggregateRepository->saveAggregateRoot(aggregate: $post);
     }
 }

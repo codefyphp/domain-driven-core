@@ -30,8 +30,11 @@ final class PostWasCreated extends AggregateChanged implements DomainEvent
 
     private Content $content;
 
-    public static function withData(PostId $postId, Title $title, Content $content): DomainEvent|AggregateChanged
-    {
+    public static function withData(
+        PostId $postId,
+        Title $title,
+        Content $content
+    ): PostWasCreated|DomainEvent|AggregateChanged {
         $event = self::occur(
             aggregateId: $postId,
             payload: [

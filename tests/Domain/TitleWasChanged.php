@@ -28,7 +28,7 @@ final class TitleWasChanged extends AggregateChanged implements DomainEvent
 
     private Title $title;
 
-    public static function withData(PostId $postId, Title $title): DomainEvent|AggregateChanged
+    public static function withData(PostId $postId, Title $title): TitleWasChanged|DomainEvent|AggregateChanged
     {
         $event = self::occur(
             aggregateId: $postId,
