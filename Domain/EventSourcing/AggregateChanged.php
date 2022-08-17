@@ -15,18 +15,18 @@ declare(strict_types=1);
 namespace Codefy\Domain\EventSourcing;
 
 use Codefy\Domain\Aggregate\AggregateId;
+use Codefy\Domain\Aggregate\AggregateType;
 use Codefy\Domain\Metadata;
 use DateTimeInterface;
 use Qubus\Support\DateTime\QubusDateTimeImmutable;
 use Qubus\Support\DateTime\QubusDateTimeZone;
 
-use function Qubus\Support\Helpers\classname_to_delimited_string;
 use function Qubus\Support\Helpers\is_null__;
 
 /**
  * Something that happened in the past and that is of importance to the business.
  */
-abstract class AggregateChanged implements DomainEvent
+class AggregateChanged implements DomainEvent
 {
     public const DATE_FORMAT = 'Y-m-d H:i:s.u';
     public readonly ?array $payload;
@@ -42,9 +42,7 @@ abstract class AggregateChanged implements DomainEvent
         $this->setPayload(payload: $payload);
         $this->setEventId(eventId: $metadata[Metadata::EVENT_ID] ?? new EventId());
         $this->setEventType(
-            eventType: $metadata[Metadata::EVENT_TYPE] ?? classname_to_delimited_string(
-                className: static::class
-            )
+            eventType: $metadata[Metadata::EVENT_TYPE] ?? AggregateType::fromClassName(className: static::class)
         );
         $this->init();
     }

@@ -47,5 +47,7 @@ class PostEventBusCommandHandler
         );
 
         $this->eventBus->publish(...$post->pullDomainEvents());
+
+        $post->clearRecordedEvents();
     }
 }

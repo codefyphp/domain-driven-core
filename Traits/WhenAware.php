@@ -30,7 +30,7 @@ trait WhenAware
 
         if (!method_exists($this, $method)) {
             throw new BadMethodCallException(
-                sprintf("There is no event named '%s' that can be applied to '%s'.", $method, static::class)
+                sprintf("There is no method named '%s' that can be called in '%s'.", $method, static::class)
             );
         }
 

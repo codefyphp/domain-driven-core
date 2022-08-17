@@ -21,7 +21,9 @@ use Codefy\Traits\EventSourcedAware;
 use Codefy\Traits\PublisherAware;
 use Qubus\Exception\Data\TypeException;
 
-abstract class EventSourcedAggregate implements AggregateRoot, EventSourcing
+use function get_called_class;
+
+class EventSourcedAggregate implements AggregateRoot, EventSourcing
 {
     use EventProducerAware;
     use EventSourcedAware;
@@ -85,5 +87,20 @@ abstract class EventSourcedAggregate implements AggregateRoot, EventSourcing
         $instance->replay(history: $aggregateHistory);
 
         return $instance;
+    }
+
+    public function equals(AggregateRoot $aggregateRoot): bool
+    {
+        return $this->aggregateId() === $aggregateRoot->aggregateId();
+    }
+
+    /**
+     * Retrieves the class name.
+     *
+     * @return string
+     */
+    final public static function className(): string
+    {
+        return static::class;
     }
 }

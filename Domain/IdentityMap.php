@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Codefy\Domain;
 
 use Codefy\Domain\Aggregate\AggregateId;
-use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
 use Codefy\Domain\Aggregate\RecordsEvents;
 
 /**
@@ -30,14 +29,13 @@ interface IdentityMap
      *
      * @param RecordsEvents $aggregate
      * @return void
-     * @throws MultipleInstancesOfAggregateDetectedException
      */
-    public function attach(RecordsEvents $aggregate): void;
+    public function attachToIdentityMap(RecordsEvents $aggregate): void;
 
     /**
      * Retrieve an aggregate from the map by its aggregate id.
      * @param AggregateId $aggregateId
      * @return RecordsEvents|null
      */
-    public function get(AggregateId $aggregateId): RecordsEvents|null;
+    public function retrieveFromIdentityMap(AggregateId $aggregateId): RecordsEvents|null;
 }

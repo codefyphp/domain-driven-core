@@ -18,4 +18,5 @@ use Codefy\Domain\Model\EntityId;
 
 interface AggregateId extends EntityId
 {
+    public function aggregateClassName(): string;
 }

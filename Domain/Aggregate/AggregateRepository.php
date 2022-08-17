@@ -17,12 +17,13 @@ namespace Codefy\Domain\Aggregate;
 interface AggregateRepository
 {
     /**
-     * Retrieve aggregate by aggregate id.
+     * Loads an aggregate from the given aggregate id.
      *
      * @param AggregateId $aggregateId
-     * @return RecordsEvents
+     * @return RecordsEvents|null
+     * @throws AggregateNotFoundException
      */
-    public function find(AggregateId $aggregateId): RecordsEvents;
+    public function loadAggregateRoot(AggregateId $aggregateId): RecordsEvents|null;
 
     /**
      * Persist an aggregate.
@@ -30,5 +31,5 @@ interface AggregateRepository
      * @param RecordsEvents $aggregate
      * @return void
      */
-    public function save(RecordsEvents $aggregate): void;
+    public function saveAggregateRoot(RecordsEvents $aggregate): void;
 }
