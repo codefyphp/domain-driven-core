@@ -48,7 +48,7 @@
     }
   },
   "scripts": {
-    "test": "XDEBUG_MODE=coverage vendor/bin/pest --coverage --min=90 --colors=always",
+    "test": "XDEBUG_MODE=coverage vendor/bin/pest --coverage --min=50 --colors=always",
     "cs-check": "phpcs",
     "cs-fix": "phpcbf"
   },
