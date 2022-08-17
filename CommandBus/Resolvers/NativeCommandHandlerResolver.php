@@ -8,7 +8,7 @@
  * @copyright  2015 Adam Nicholson <adamnicholson10@gmail.com>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      1.0.0
+ * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -77,9 +77,9 @@ class NativeCommandHandlerResolver implements CommandHandlerResolver
         $classParts = explode(separator: '\\', string: $commandName);
         $commandNameWithoutNamespace = array_pop($classParts);
         $class = implode(
-            separator: '\\',
-            array: $classParts
-        ) . '\\Handlers\\' . $commandNameWithoutNamespace . 'Handler';
+                separator: '\\',
+                array: $classParts
+            ) . '\\Handlers\\' . $commandNameWithoutNamespace . 'Handler';
         if (class_exists(class: $class)) {
             return $this->container->make($class);
         }

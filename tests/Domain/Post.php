@@ -4,10 +4,11 @@
  * CodefyPHP
  *
  * @link       https://github.com/codefyphp/codefy
- * @copyright  2022 Joshua Parker <josh@joshuaparker.blog>
+ * @copyright  2022
+ * @author     Joshua Parker <josh@joshuaparker.blog>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      1.0.0
+ * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -43,7 +44,7 @@ final class Post extends EventSourcedAggregate implements AggregateRoot
     {
         return tap(
             value: new self($postId),
-            callback: fn ($post) => $post->recordApplyAndPublishThat(
+            callback: fn($post) => $post->recordApplyAndPublishThat(
                 PostWasCreated::withData(postId: $postId, title: $title, content: $content)
             )
         );

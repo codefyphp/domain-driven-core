@@ -8,7 +8,7 @@
  * @copyright  2015 Adam Nicholson <adamnicholson10@gmail.com>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      1.0.0
+ * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ class NativeContainer implements Container
         $constructor = $class->getConstructor();
 
         // if no constructor, pop smoke and move out!
-        if (! $constructor) {
+        if (!$constructor) {
             return $class->newInstance();
         }
 

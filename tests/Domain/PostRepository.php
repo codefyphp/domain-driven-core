@@ -38,7 +38,6 @@ final class PostRepository implements AggregateRepository
 
     /**
      * {@inheritDoc}
-     * @throws MultipleInstancesOfAggregateDetectedException
      */
     public function loadAggregateRoot(AggregateId $aggregateId): RecordsEvents|null
     {
