@@ -26,6 +26,8 @@ use Codefy\Domain\EventSourcing\Projection;
 use Codefy\EventBus\EventBus;
 use Codefy\Traits\IdentityMapAware;
 
+use function iterator_to_array;
+
 final class PostRepository implements AggregateRepository
 {
     use IdentityMapAware;
@@ -58,14 +60,15 @@ final class PostRepository implements AggregateRepository
      */
     public function saveAggregateRoot(RecordsEvents $aggregate): void
     {
-        $events = $aggregate->getRecordedEvents();
-
         $this->attachToIdentityMap($aggregate);
 
-        foreach ($events as $event) {
-            $this->eventStore->append(event: $event);
-        }
-        $this->projection->project($events);
+        $events = iterator_to_array($aggregate->getRecordedEvents());
+
+        $transaction = $this->eventStore->commit(...$events);
+
+        $committedEvents = $transaction->committedEvents();
+
+        $this->projection->project(...$committedEvents);
 
         $aggregate->clearRecordedEvents();
 

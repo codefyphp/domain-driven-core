@@ -22,6 +22,7 @@ use Codefy\Tests\Domain\Post;
 use Codefy\Tests\Domain\PostId;
 use Codefy\Tests\Domain\PostSubscriber;
 use Codefy\Tests\Domain\Title;
+use Codefy\Tests\Domain\TitleWasNullException;
 use Qubus\Exception\Data\TypeException;
 
 class CreatePostEventBusCommandHandler
@@ -36,7 +37,7 @@ class CreatePostEventBusCommandHandler
     }
 
     /**
-     * @throws TypeException
+     * @throws TypeException|TitleWasNullException
      */
     public function handle(CreatePostCommand $command): void
     {

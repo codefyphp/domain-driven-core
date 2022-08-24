@@ -18,7 +18,7 @@ namespace Codefy\Traits;
 use BadMethodCallException;
 use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\DomainEvents;
-use ReflectionClass;
+use Codefy\Domain\EventSourcing\EventName;
 
 use function method_exists;
 use function sprintf;
@@ -27,7 +27,7 @@ trait WhenAware
 {
     protected function when(DomainEvent $event): void
     {
-        $method = sprintf('when%s', (new ReflectionClass($event))->getShortName());
+        $method = sprintf('when%s', new EventName($event));
 
         if (!method_exists($this, $method)) {
             throw new BadMethodCallException(

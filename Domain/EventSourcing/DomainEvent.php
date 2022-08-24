@@ -24,7 +24,7 @@ use DateTimeInterface;
 interface DomainEvent
 {
     /**
-     * The Aggregate this event belongs to.
+     * The ID of the Aggregate this event belongs to.
      */
     public function aggregateId(): AggregateId;
 

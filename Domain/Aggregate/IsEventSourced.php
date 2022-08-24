@@ -13,15 +13,14 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Domain\EventSourcing;
+namespace Codefy\Domain\Aggregate;
 
-interface Projection
+use Codefy\Domain\EventSourcing\EventStream;
+
+interface IsEventSourced
 {
     /**
-     * Project a set of domain events.
-     *
-     * @param DomainEvent ...$events
-     * @return void
+     * Reconstitutes an Aggregate instance from its history of domain events.
      */
-    public function project(DomainEvent ...$events): void;
+    public static function reconstituteFromEventStream(EventStream $aggregateHistory): RecordsEvents;
 }

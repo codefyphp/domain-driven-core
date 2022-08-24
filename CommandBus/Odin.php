@@ -16,6 +16,8 @@ declare(strict_types=1);
 namespace Codefy\CommandBus;
 
 use Codefy\CommandBus\Busses\SynchronousCommandBus;
+use Codefy\CommandBus\Exceptions\CommandCouldNotBeHandledException;
+use Codefy\CommandBus\Exceptions\UnresolvableCommandHandlerException;
 use ReflectionException;
 
 /**
@@ -52,8 +54,7 @@ class Odin implements CommandBus
     /**
      * Execute a command.
      *
-     * @throws Exceptions\UnresolvableCommandHandlerException
-     * @throws ReflectionException
+     * @throws UnresolvableCommandHandlerException|ReflectionException|CommandCouldNotBeHandledException
      */
     public function execute(Command $command): mixed
     {

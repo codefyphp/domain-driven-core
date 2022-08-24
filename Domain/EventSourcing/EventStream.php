@@ -13,10 +13,9 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Domain\Aggregate;
+namespace Codefy\Domain\EventSourcing;
 
-use Codefy\Domain\EventSourcing\DomainEvent;
-use Codefy\Domain\EventSourcing\DomainEvents;
+use Codefy\Domain\Aggregate\AggregateId;
 
 class EventStream extends DomainEvents
 {
@@ -28,7 +27,7 @@ class EventStream extends DomainEvents
         /** @var DomainEvent $event */
         foreach ($events as $event) {
             if (!$event->aggregateId()->equals($aggregateId)) {
-                throw new CorruptEventStreamException();
+                throw new CorruptEventStreamException(message: 'Event stream is corrupted.');
             }
         }
 

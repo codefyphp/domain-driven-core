@@ -4,11 +4,11 @@
  * CodefyPHP
  *
  * @link       https://github.com/codefyphp/codefy
- * @copyright  2022 Joshua Parker <josh@joshuaparker.blog>
- * @copyright  2014 Mathias Verraes <mathias@verraes.net>
+ * @copyright  2022
+ * @author     Joshua Parker <josh@joshuaparker.blog>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      0.1.0
+ * @since      0.2.0
  */
 
 declare(strict_types=1);
@@ -22,15 +22,16 @@ use Codefy\Domain\Aggregate\AggregateNotFoundException;
  * Event store for publishing a domain event
  * and retrieving an aggregate's history.
  */
-interface EventStore
+interface TransactionalEventStore
 {
     /**
      * Append a domain event to the event store.
      *
      * @param DomainEvent $event
+     * @param TransactionId $transactionId
      * @return void
      */
-    public function append(DomainEvent $event): void;
+    public function append(DomainEvent $event, TransactionId $transactionId): void;
 
     /**
      * Appends a list of domain events to the event store.

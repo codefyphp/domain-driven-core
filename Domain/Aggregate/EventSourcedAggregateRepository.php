@@ -15,13 +15,12 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\Aggregate;
 
+use Codefy\Domain\EventSourcing\CorruptEventStreamException;
 use Codefy\Domain\EventSourcing\EventStore;
 use Codefy\Domain\EventSourcing\Projection;
-use Codefy\EventBus\EventBus;
 use Codefy\Traits\IdentityMapAware;
 
-use function Qubus\Support\Helpers\is_null__;
-use function var_dump;
+use function iterator_to_array;
 
 class EventSourcedAggregateRepository implements AggregateRepository
 {
@@ -33,9 +32,8 @@ class EventSourcedAggregateRepository implements AggregateRepository
     ) {
     }
 
-    /**
-     * {@inheritDoc}
-     * @throws MultipleInstancesOfAggregateDetectedException
+    /** {@inheritDoc}
+     * @throws CorruptEventStreamException
      */
     public function loadAggregateRoot(AggregateId $aggregateId): RecordsEvents
     {
@@ -53,19 +51,18 @@ class EventSourcedAggregateRepository implements AggregateRepository
         return $eventSourcedAggregate;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public function saveAggregateRoot(RecordsEvents $aggregate): void
     {
-        $events = $aggregate->getRecordedEvents();
+        $events = iterator_to_array($aggregate->getRecordedEvents());
 
-        foreach ($events as $event) {
-            $this->eventStore->append(event: $event);
-        }
-        $this->projection->project($events);
+        $transaction = $this->eventStore->commit(...$events);
 
         $aggregate->clearRecordedEvents();
+
+        $committedEvents = $transaction->committedEvents();
+
+        $this->projection->project(...$committedEvents);
 
         $this->removeFromIdentityMap($aggregate);
     }

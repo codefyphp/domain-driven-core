@@ -13,12 +13,10 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Domain\Aggregate;
+namespace Codefy\Domain\EventSourcing;
 
-interface EventSourcing
+use Qubus\Exception\Exception;
+
+final class CorruptEventStreamException extends Exception implements EventSourcingException
 {
-    /**
-     * Reconstitutes an Aggregate instance from its history of domain events.
-     */
-    public static function reconstituteFromEventStream(EventStream $aggregateHistory): RecordsEvents;
 }
