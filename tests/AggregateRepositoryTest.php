@@ -18,16 +18,21 @@ namespace Codefy\Tests;
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\Aggregate\AggregateRepository;
 use Codefy\Domain\Aggregate\EventSourcedAggregateRepository;
+use Codefy\Domain\EventSourcing\CorruptEventStreamException;
+use Codefy\Domain\EventSourcing\DomainEvent;
+use Codefy\Domain\EventSourcing\EventStream;
+use Codefy\Domain\EventSourcing\EventStreamIsEmptyException;
 use Codefy\Domain\EventSourcing\InMemoryEventStore;
 use Codefy\Tests\Domain\Content;
 use Codefy\Tests\Domain\InMemoryPostProjection;
 use Codefy\Tests\Domain\Post;
 use Codefy\Tests\Domain\PostId;
-use Codefy\Tests\Domain\PostRepository;
 use Codefy\Tests\Domain\Title;
+use DateTimeInterface;
 use PHPUnit\Framework\Assert;
-use Qubus\Exception\Data\TypeException;
+use Qubus\Support\DateTime\QubusDateTime;
 
+use function array_filter;
 use function it;
 
 $repository = new EventSourcedAggregateRepository(
@@ -125,3 +130,30 @@ it('should remove aggregate from identity map when saved.', function () use ($re
     Assert::assertNotSame(expected: $fetchedPost1, actual: $fetchedPost2);
     Assert::assertEquals(expected: 'Assert Equals', actual: $fetchedPost2->title()->__toString());
 });
+
+it('should throw EventStreamIsEmptyException when aggregate root cannot be found.', function () use ($repository) {
+    $post = Post::createPostWithoutTap(
+        postId: new PostId(value: 'bd38039e-4740-4453-88eb-395fbe8db528'),
+        title: new Title(value: 'Aggregate Post Title'),
+        content: new Content(value: 'Short form content.')
+    );
+
+    $repository->saveAggregateRoot(aggregate: $post);
+
+    $repository->loadAggregateRoot(aggregateId: new PostId(value: '1df1afff-ed79-4193-b1df-6f8c81a1d45d'));
+})->throws(exception: EventStreamIsEmptyException::class);
+
+it('should throw CorruptEventStreamException when an AggregateId does not match.', function () {
+    $aggregateId = new PostId();
+
+    $post = Post::createPostWithoutTap(
+        postId: new PostId(value: 'bd38039e-4740-4453-88eb-395fbe8db528'),
+        title: new Title(value: 'Aggregate Post Title'),
+        content: new Content(value: 'Short form content.')
+    );
+
+    return new EventStream(
+        aggregateId: $aggregateId,
+        events: $post->pullDomainEvents()
+    );
+})->throws(exception: CorruptEventStreamException::class);

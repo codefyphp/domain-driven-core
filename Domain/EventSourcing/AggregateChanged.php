@@ -34,7 +34,7 @@ class AggregateChanged implements DomainEvent
     protected ?array $metadata;
     protected ?DateTimeInterface $recordedAt = null;
 
-    protected function __construct(AggregateId $aggregateId, ?array $payload, ?array $metadata = [])
+    private function __construct(AggregateId $aggregateId, ?array $payload, ?array $metadata = [])
     {
         $this->metadata = $metadata;
 
@@ -51,7 +51,7 @@ class AggregateChanged implements DomainEvent
     /**
      * Named constructor for generating a domain event.
      */
-    public static function occur(AggregateId $aggregateId, array $payload, array $metadata = []): self
+    final public static function occur(AggregateId $aggregateId, array $payload, array $metadata = []): self
     {
         return new static(aggregateId: $aggregateId, payload: $payload, metadata: $metadata);
     }
@@ -59,7 +59,7 @@ class AggregateChanged implements DomainEvent
     /**
      * Named constructor for generating a domain event from an array.
      */
-    public static function fromArray(array $data): DomainEvent
+    final public static function fromArray(array $data): DomainEvent
     {
         return new static(
             aggregateId: $data['aggregateId'],
@@ -70,8 +70,6 @@ class AggregateChanged implements DomainEvent
 
     /**
      * Returns payload array.
-     *
-     * @return array
      */
     public function payload(): array
     {
@@ -86,9 +84,7 @@ class AggregateChanged implements DomainEvent
         return $this->metadata[Metadata::EVENT_TYPE];
     }
 
-    /**
-     * ID of the aggregate.
-     */
+    /** {@inheritDoc} */
     public function aggregateId(): AggregateId
     {
         return $this->metadata[Metadata::AGGREGATE_ID];
@@ -163,7 +159,7 @@ class AggregateChanged implements DomainEvent
     /**
      * Append event metadata.
      */
-    public function withMetadata(array $metadata): self
+    final public function withMetadata(array $metadata): self
     {
         $event = clone $this;
         $event->metadata = $metadata;
@@ -174,7 +170,7 @@ class AggregateChanged implements DomainEvent
     /**
      * Append event metadata.
      */
-    public function withAddedMetadata(string $key, mixed $value): self
+    final public function withAddedMetadata(string $key, mixed $value): self
     {
         $event = clone $this;
         $event->metadata[$key] = $value;
@@ -185,7 +181,7 @@ class AggregateChanged implements DomainEvent
     /**
      * Append event version.
      */
-    public function withPlayhead(int $playhead): self
+    final public function withPlayhead(int $playhead): self
     {
         $event = clone $this;
         $event->setPlayhead(playhead: $playhead);

@@ -16,8 +16,7 @@ declare(strict_types=1);
 namespace Codefy\Domain\EventSourcing;
 
 use Codefy\Domain\Aggregate\AggregateId;
-use Codefy\Domain\Aggregate\CorruptEventStreamException;
-use Codefy\Domain\Aggregate\EventStream;
+use Qubus\Exception\Data\TypeException;
 
 use function array_filter;
 
@@ -31,11 +30,30 @@ final class InMemoryEventStore implements EventStore
     }
 
     /**
-     * @throws CorruptEventStreamException
+     * @throws TypeException
+     */
+    public function commit(DomainEvent ...$events): Transactional
+    {
+        $stream = DomainEvents::fromArray($events);
+        $transactionId = new TransactionId();
+
+        if (count($events) === 0) {
+            return new EventStoreTransaction($transactionId, $stream, $events);
+        }
+
+        foreach ($events as $event) {
+            $this->append($event);
+        }
+
+        return new EventStoreTransaction($transactionId, $stream, $events);
+    }
+
+    /**
+     * @throws CorruptEventStreamException|EventStreamIsEmptyException
      */
     public function getAggregateHistoryFor(AggregateId $aggregateId): EventStream
     {
-        return new EventStream(
+        $eventStream = new EventStream(
             aggregateId: $aggregateId,
             events: array_filter(
                 array: $this->events,
@@ -44,14 +62,22 @@ final class InMemoryEventStore implements EventStore
                 }
             )
         );
+
+        if ($eventStream->isEmpty()) {
+            throw new EventStreamIsEmptyException(
+                message: 'The requested event stream is empty.'
+            );
+        }
+
+        return $eventStream;
     }
 
     /**
-     * @throws CorruptEventStreamException
+     * @throws CorruptEventStreamException|EventStreamIsEmptyException
      */
     public function loadFromPlayhead(AggregateId $aggregateId, int $playhead): EventStream
     {
-        return new EventStream(
+        $eventStream = new EventStream(
             aggregateId: $aggregateId,
             events: array_filter(
                 array: $this->events,
@@ -60,5 +86,13 @@ final class InMemoryEventStore implements EventStore
                 }
             )
         );
+
+        if ($eventStream->isEmpty()) {
+            throw new EventStreamIsEmptyException(
+                message: 'The requested event stream is empty.'
+            );
+        }
+
+        return $eventStream;
     }
 }

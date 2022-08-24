@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 namespace Codefy\Traits;
 
-use Codefy\Domain\Aggregate\EventStream;
 use Codefy\Domain\EventSourcing\DomainEvent;
+use Codefy\Domain\EventSourcing\EventStream;
 
 trait ReplayAware
 {

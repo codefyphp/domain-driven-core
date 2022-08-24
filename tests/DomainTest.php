@@ -16,13 +16,11 @@ declare(strict_types=1);
 namespace Codefy\Tests;
 
 use Codefy\Domain\Aggregate\AggregateId;
-use Codefy\Domain\Aggregate\EventStream;
-use Codefy\Domain\EventSourcing\AggregateChanged;
 use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\DomainEvents;
-use Codefy\Domain\EventSourcing\EventId;
+use Codefy\Domain\EventSourcing\EventStream;
 use Codefy\Domain\EventSourcing\InMemoryEventStore;
-use Codefy\Domain\Metadata;
+use Codefy\Domain\EventSourcing\Transactional;
 use Codefy\Tests\Domain\Content;
 use Codefy\Tests\Domain\InMemoryPostProjection;
 use Codefy\Tests\Domain\Post;
@@ -32,18 +30,13 @@ use Codefy\Tests\Domain\PostRepository;
 use Codefy\Tests\Domain\PostWasCreated;
 use Codefy\Tests\Domain\Title;
 use Codefy\Tests\Domain\TitleWasChanged;
+use Codefy\Tests\Domain\TitleWasNullException;
 use PHPUnit\Framework\Assert;
 use Qubus\Exception\Data\TypeException;
-use Qubus\Support\DateTime\QubusDateTimeImmutable;
-use Qubus\Support\DateTime\QubusDateTimeZone;
-use Ramsey\Uuid\UuidInterface;
 
 use function expect;
 use function it;
 use function iterator_to_array;
-use function json_encode;
-
-use const JSON_PRETTY_PRINT;
 
 try {
     $postId = PostId::fromNative('760b7c16-b28e-4d31-9f93-7a2f0d3a1c51');
@@ -96,6 +89,14 @@ it('should expose content.', function () use ($event) {
     expect(value: $event->content())->toEqual(expected: new Content(value: 'Short content for this new post.'));
 });
 
+it('should not allow a null title.', function () use ($event) {
+    return Post::createPostWithoutTap(
+        postId: new PostId(value: '760b7c16-b28e-4d31-9f93-7a2f0d3a1c51'),
+        title: new Title(value: ''),
+        content: new Content(value: 'A null title is not allowed'),
+    );
+})->throws(exception: TitleWasNullException::class, exceptionMessage: 'Title cannot be null.');
+
 /**
  * Testing recorded events.
  */
@@ -108,9 +109,66 @@ it('should have recorded 2 events.', function () {
     $post->changeTitle(title: new Title(value: 'Updated Post Title'));
     $events = $post->getRecordedEvents();
 
-    expect(value: PostId::fromString('760b7c16-b28e-4d31-9f93-7a2f0d3a1c51'))->toEqual(expected: $post->aggregateId())
+    Assert::assertTrue(condition: $post->hasRecordedEvents());
+
+    expect(value: PostId::fromString(postId: '760b7c16-b28e-4d31-9f93-7a2f0d3a1c51'))
+        ->toEqual(expected: $post->aggregateId())
         ->and(value: 2)->toEqual(expected: $post->playhead());
+
     Assert::assertCount(expectedCount: 2, haystack: $events);
+
+    $post->clearRecordedEvents();
+
+    Assert::assertFalse(condition: $post->hasRecordedEvents());
+    Assert::assertCount(expectedCount: 0, haystack: $post->getRecordedEvents());
+});
+
+it('should retrieve all events from the event store based on aggregate id.', function () {
+    $postId = new PostId(value: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f');
+
+    $post = Post::createPostWithoutTap(
+        postId: $postId,
+        title: new Title(value: 'Second Post Title'),
+        content: new Content(value: 'Another short form content.')
+    );
+
+    $events = $post->getRecordedEvents();
+    $eventStore = new InMemoryEventStore();
+
+    foreach ($events as $event) {
+        $eventStore->append(event: $event);
+    }
+
+    $iterator = $eventStore->getAggregateHistoryFor(
+        aggregateId: PostId::fromString(
+            postId: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f'
+        )
+    );
+    $aggregateHistory = $iterator->toArray();
+
+    foreach ($aggregateHistory as $event) {
+        expect(value: $post->title())->toEqual(expected: $event->title());
+        expect(value: $post->aggregateId())->toEqual(expected: $event->aggregateId());
+    }
+});
+
+it('should return an event store transaction.', function () {
+    $postId = new PostId(value: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f');
+
+    $post = Post::createPostWithoutTap(
+        postId: $postId,
+        title: new Title(value: 'Second Post Title'),
+        content: new Content(value: 'Another short form content.')
+    );
+
+    $events = $post->getRecordedEvents();
+    $eventStore = new InMemoryEventStore();
+
+    $transaction = $eventStore->commit(...iterator_to_array($events));
+
+    expect(value: $transaction)->toBeInstanceOf(class: Transactional::class);
+    expect(value: $transaction->eventStream())->toBeInstanceOf(class: DomainEvents::class);
+    expect(value: $post->pullDomainEvents())->toEqual(expected: $transaction->committedEvents());
 });
 
 /**

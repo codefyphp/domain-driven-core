@@ -8,20 +8,13 @@
  * @author     Joshua Parker <josh@joshuaparker.blog>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      0.1.0
+ * @since      0.2.0
  */
 
 declare(strict_types=1);
 
-namespace Codefy\Domain\EventSourcing;
+namespace Codefy\CommandBus\Exceptions;
 
-interface Projection
+class CommandPropertyNotFoundException extends OdinException
 {
-    /**
-     * Project a set of domain events.
-     *
-     * @param DomainEvent ...$events
-     * @return void
-     */
-    public function project(DomainEvent ...$events): void;
 }

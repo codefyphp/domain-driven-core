@@ -8,16 +8,19 @@
  * @author     Joshua Parker <josh@joshuaparker.blog>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      0.1.0
+ * @since      0.2.0
  */
 
 declare(strict_types=1);
 
-namespace Codefy\Domain\Aggregate;
+namespace Codefy\Domain\EventSourcing;
 
-use Codefy\Domain\EventSourcing\EventSourcingException;
-use Qubus\Exception\Exception;
-
-final class CorruptEventStreamException extends Exception implements EventSourcingException
+interface Transactional
 {
+    public function eventStream(): DomainEvents;
+
+    /**
+     * @return DomainEvent[]
+     */
+    public function committedEvents(): array;
 }

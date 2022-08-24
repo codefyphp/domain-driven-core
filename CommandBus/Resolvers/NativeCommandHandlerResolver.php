@@ -77,9 +77,9 @@ class NativeCommandHandlerResolver implements CommandHandlerResolver
         $classParts = explode(separator: '\\', string: $commandName);
         $commandNameWithoutNamespace = array_pop($classParts);
         $class = implode(
-                separator: '\\',
-                array: $classParts
-            ) . '\\Handlers\\' . $commandNameWithoutNamespace . 'Handler';
+            separator: '\\',
+            array: $classParts
+        ) . '\\Handlers\\' . $commandNameWithoutNamespace . 'Handler';
         if (class_exists(class: $class)) {
             return $this->container->make($class);
         }
