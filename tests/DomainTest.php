@@ -13,30 +13,24 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
-
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\DomainEvents;
 use Codefy\Domain\EventSourcing\EventStream;
 use Codefy\Domain\EventSourcing\InMemoryEventStore;
 use Codefy\Domain\EventSourcing\Transactional;
-use Codefy\Tests\Domain\Content;
-use Codefy\Tests\Domain\InMemoryPostProjection;
-use Codefy\Tests\Domain\Post;
-use Codefy\Tests\Domain\PostFactory;
-use Codefy\Tests\Domain\PostId;
-use Codefy\Tests\Domain\PostRepository;
-use Codefy\Tests\Domain\PostWasCreated;
-use Codefy\Tests\Domain\Title;
-use Codefy\Tests\Domain\TitleWasChanged;
-use Codefy\Tests\Domain\TitleWasNullException;
+use Codefy\Tests\Content;
+use Codefy\Tests\InMemoryPostProjection;
+use Codefy\Tests\Post;
+use Codefy\Tests\PostFactory;
+use Codefy\Tests\PostId;
+use Codefy\Tests\PostRepository;
+use Codefy\Tests\PostWasCreated;
+use Codefy\Tests\Title;
+use Codefy\Tests\TitleWasChanged;
+use Codefy\Tests\TitleWasNullException;
 use PHPUnit\Framework\Assert;
 use Qubus\Exception\Data\TypeException;
-
-use function expect;
-use function it;
-use function iterator_to_array;
 
 try {
     $postId = PostId::fromNative('760b7c16-b28e-4d31-9f93-7a2f0d3a1c51');

@@ -13,8 +13,6 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
-
 use Codefy\CommandBus\Busses\SynchronousCommandBus;
 use Codefy\CommandBus\Command;
 use Codefy\CommandBus\Containers\ContainerFactory;
@@ -25,17 +23,14 @@ use Codefy\CommandBus\InvalidPayloadException;
 use Codefy\CommandBus\Odin;
 use Codefy\CommandBus\PropertyCommand;
 use Codefy\CommandBus\Resolvers\NativeCommandHandlerResolver;
-use Codefy\Tests\CommandBus\CreatePostCommand;
-use Codefy\Tests\CommandBus\CreatePostCommandHandler;
-use Codefy\Tests\CommandBus\SelfHandlingCommand;
-use Codefy\Tests\Domain\PostId;
+use Codefy\Tests\CreatePostCommand;
+use Codefy\Tests\CreatePostCommandHandler;
+use Codefy\Tests\SelfHandlingCommand;
+use Codefy\Tests\PostId;
 use Qubus\Exception\Data\TypeException;
 use Qubus\Exception\Http\Client\NotFoundException;
 use Qubus\Injector\Config\InjectorConfig;
 use Qubus\Injector\Psr11\Container;
-
-use function expect;
-use function it;
 
 $config = include 'commandbus.php';
 

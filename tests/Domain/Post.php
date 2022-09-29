@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\Domain;
+namespace Codefy\Tests;
 
 use Codefy\Domain\Aggregate\AggregateRoot;
 use Codefy\Domain\Aggregate\EventSourcedAggregate;
@@ -58,7 +58,7 @@ final class Post extends EventSourcedAggregate implements AggregateRoot
 
         return tap(
             value: self::root($postId),
-            callback: fn ($post) => $post->recordApplyAndPublishThat(
+            callback: fn($post) => $post->recordApplyAndPublishThat(
                 PostWasCreated::withData(postId: $postId, title: $title, content: $content)
             )
         );

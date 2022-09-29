@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\Domain;
+namespace Codefy\Tests;
 
 use Qubus\Exception\Exception;
 

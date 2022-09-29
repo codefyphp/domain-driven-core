@@ -13,13 +13,11 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\CommandBus;
+namespace Codefy\Tests;
 
 use Codefy\Domain\Aggregate\AggregateNotFoundException;
 use Codefy\Domain\Aggregate\AggregateRepository;
 use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
-use Codefy\Tests\Domain\PostId;
-use Codefy\Tests\Domain\TitleWasChanged;
 use Qubus\Exception\Data\TypeException;
 
 class ChangeTitleCommandHandler

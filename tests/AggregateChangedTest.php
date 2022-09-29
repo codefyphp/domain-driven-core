@@ -13,15 +13,11 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
-
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\EventSourcing\AggregateChanged;
 use Codefy\Domain\EventSourcing\DomainEvent;
-use Codefy\Tests\Domain\PostId;
+use Codefy\Tests\PostId;
 use PHPUnit\Framework\Assert;
-
-use function it;
 
 it('should have AggregateId after construct.', function () {
     $event = AggregateChanged::occur(
