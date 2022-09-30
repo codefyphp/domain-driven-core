@@ -13,17 +13,14 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\Domain;
+namespace Codefy\Tests;
 
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\Aggregate\AggregateRepository;
-use Codefy\Domain\Aggregate\EventSourcedAggregate;
-use Codefy\Domain\Aggregate\EventSourcedAggregateRepository;
-use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
 use Codefy\Domain\Aggregate\RecordsEvents;
+use Codefy\Domain\EventSourcing\CorruptEventStreamException;
 use Codefy\Domain\EventSourcing\EventStore;
 use Codefy\Domain\EventSourcing\Projection;
-use Codefy\EventBus\EventBus;
 use Codefy\Traits\IdentityMapAware;
 
 use function iterator_to_array;
@@ -40,6 +37,7 @@ final class PostRepository implements AggregateRepository
 
     /**
      * {@inheritDoc}
+     * @throws CorruptEventStreamException
      */
     public function loadAggregateRoot(AggregateId $aggregateId): RecordsEvents|null
     {

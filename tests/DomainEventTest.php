@@ -13,28 +13,19 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
-
 use Codefy\Domain\EventSourcing\DomainEvents;
 use Codefy\Domain\EventSourcing\EventId;
 use Codefy\Domain\Metadata;
-use Codefy\Tests\Domain\Content;
-use Codefy\Tests\Domain\InMemoryPostProjection;
-use Codefy\Tests\Domain\PostId;
-use Codefy\Tests\Domain\PostWasCreated;
-use Codefy\Tests\Domain\Title;
-use Codefy\Tests\Domain\TitleWasChanged;
+use Codefy\Tests\Content;
+use Codefy\Tests\InMemoryPostProjection;
+use Codefy\Tests\PostId;
+use Codefy\Tests\PostWasCreated;
+use Codefy\Tests\Title;
+use Codefy\Tests\TitleWasChanged;
 use PHPUnit\Framework\Assert;
 use Qubus\Exception\Data\TypeException;
 use Qubus\Support\DateTime\QubusDateTimeImmutable;
 use Qubus\Support\DateTime\QubusDateTimeZone;
-
-use function expect;
-use function it;
-use function json_encode;
-use function sprintf;
-
-use const JSON_PRETTY_PRINT;
 
 try {
     $postId = PostId::fromNative('760b7c16-b28e-4d31-9f93-7a2f0d3a1c51');

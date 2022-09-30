@@ -13,16 +13,9 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\CommandBus;
+namespace Codefy\Tests;
 
 use Codefy\EventBus\EventBus;
-use Codefy\Tests\Domain\Content;
-use Codefy\Tests\Domain\InMemoryPostProjection;
-use Codefy\Tests\Domain\Post;
-use Codefy\Tests\Domain\PostId;
-use Codefy\Tests\Domain\PostSubscriber;
-use Codefy\Tests\Domain\Title;
-use Codefy\Tests\Domain\TitleWasNullException;
 use Qubus\Exception\Data\TypeException;
 
 class CreatePostEventBusCommandHandler

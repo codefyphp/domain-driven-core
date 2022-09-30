@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\CommandBus;
+namespace Codefy\Tests;
 
 use Codefy\CommandBus\PayloadCommand;
 
