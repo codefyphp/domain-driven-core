@@ -16,7 +16,6 @@ declare(strict_types=1);
 namespace Codefy\Domain\EventSourcing;
 
 use BadMethodCallException;
-use ReflectionClass;
 use ReflectionException;
 
 abstract class BaseProjection implements Projection
@@ -24,10 +23,10 @@ abstract class BaseProjection implements Projection
     /**
      * @throws ReflectionException
      */
-    public function project(DomainEvents $events): void
+    public function project(DomainEvent ...$events): void
     {
         foreach ($events as $event) {
-            $method = sprintf('projectWhen%s', (new ReflectionClass($event))->getShortName());
+            $method = sprintf('projectWhen%s', new EventName($event));
 
             if (!method_exists(object_or_class: $this, method: $method)) {
                 throw new BadMethodCallException(

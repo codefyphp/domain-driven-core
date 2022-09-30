@@ -8,23 +8,24 @@
  * @author     Joshua Parker <josh@joshuaparker.blog>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
  *
- * @since      0.1.0
+ * @since      0.2.0
  */
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
+namespace Codefy\Domain\EventSourcing;
 
 use Qubus\Exception\Data\TypeException;
-use Qubus\ValueObjects\StringLiteral\StringLiteral;
+use Qubus\ValueObjects\Identity\Uuid;
+use Qubus\ValueObjects\ValueObject;
 
-final class Title extends StringLiteral
+class TransactionId extends Uuid implements ValueObject
 {
     /**
      * @throws TypeException
      */
-    public static function fromString(string $title): self
+    public static function fromString(string $transactionId): self
     {
-        return new self(value: $title);
+        return new self(value: $transactionId);
     }
 }

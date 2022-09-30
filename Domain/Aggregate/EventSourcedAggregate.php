@@ -17,21 +17,25 @@ namespace Codefy\Domain\Aggregate;
 
 use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\DomainEvents;
+use Codefy\Domain\EventSourcing\EventStream;
 use Codefy\Traits\EventProducerAware;
 use Codefy\Traits\EventSourcedAware;
 use Codefy\Traits\PublisherAware;
 use Qubus\Exception\Data\TypeException;
 
-use function get_called_class;
-
-class EventSourcedAggregate implements AggregateRoot, EventSourcing
+class EventSourcedAggregate implements AggregateRoot, IsEventSourced
 {
     use EventProducerAware;
     use EventSourcedAware;
     use PublisherAware;
 
-    protected function __construct(public readonly AggregateId $aggregateId)
+    private function __construct(public readonly AggregateId $aggregateId)
     {
+    }
+
+    final public static function root(AggregateId $aggregateId): static
+    {
+        return new static(aggregateId: $aggregateId);
     }
 
     /**
@@ -55,9 +59,8 @@ class EventSourcedAggregate implements AggregateRoot, EventSourcing
         return !empty($this->recordedEvents);
     }
 
-    /**
-     * {@inheritDoc}
-     *
+    /** {@inheritDoc}
+     * @throws TypeException
      */
     public function getRecordedEvents(): DomainEvents
     {
@@ -76,6 +79,11 @@ class EventSourcedAggregate implements AggregateRoot, EventSourcing
         return $this->aggregateId;
     }
 
+    /**
+     * Aggregate root version.
+     *
+     * @return int
+     */
     public function playhead(): int
     {
         return $this->playhead;
@@ -90,7 +98,7 @@ class EventSourcedAggregate implements AggregateRoot, EventSourcing
         return $instance;
     }
 
-    public function equals(AggregateRoot $aggregateRoot): bool
+    final public function equals(AggregateRoot $aggregateRoot): bool
     {
         return $this->aggregateId() === $aggregateRoot->aggregateId();
     }

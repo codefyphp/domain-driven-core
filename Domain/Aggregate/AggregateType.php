@@ -15,8 +15,6 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\Aggregate;
 
-use Codefy\Domain\Model\EntityId;
-
 use function array_map;
 use function end;
 use function explode;

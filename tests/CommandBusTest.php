@@ -13,26 +13,24 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
-
 use Codefy\CommandBus\Busses\SynchronousCommandBus;
 use Codefy\CommandBus\Command;
 use Codefy\CommandBus\Containers\ContainerFactory;
 use Codefy\CommandBus\Containers\Psr11Container;
+use Codefy\CommandBus\Exceptions\CommandCouldNotBeHandledException;
+use Codefy\CommandBus\Exceptions\CommandPropertyNotFoundException;
 use Codefy\CommandBus\InvalidPayloadException;
 use Codefy\CommandBus\Odin;
+use Codefy\CommandBus\PropertyCommand;
 use Codefy\CommandBus\Resolvers\NativeCommandHandlerResolver;
-use Codefy\Tests\CommandBus\CreatePostCommand;
-use Codefy\Tests\CommandBus\CreatePostCommandHandler;
-use Codefy\Tests\CommandBus\SelfHandlingCommand;
-use Codefy\Tests\Domain\PostId;
+use Codefy\Tests\CreatePostCommand;
+use Codefy\Tests\CreatePostCommandHandler;
+use Codefy\Tests\SelfHandlingCommand;
+use Codefy\Tests\PostId;
 use Qubus\Exception\Data\TypeException;
 use Qubus\Exception\Http\Client\NotFoundException;
 use Qubus\Injector\Config\InjectorConfig;
 use Qubus\Injector\Psr11\Container;
-
-use function expect;
-use function it;
 
 $config = include 'commandbus.php';
 
@@ -155,3 +153,41 @@ it('should throw an implementation of NotFoundExceptionInterface.', function () 
 
     expect(value: 'No entry found: User')->toEqual(expected: $exception->getMessage());
 })->throws(exception: NotFoundException::class);
+
+it('should return defined property.', function () {
+    $testCommand = new class () extends PropertyCommand {
+        public PostId $postId;
+    };
+
+    $command = new $testCommand(['postId' => new PostId(value: '5161d369-c566-4379-9f25-a7d4f8bd1661')]);
+
+    expect(value: new PostId('5161d369-c566-4379-9f25-a7d4f8bd1661'))->toEqual(expected: $command->postId);
+});
+
+it('should throw a CommandPropertyNotFoundException when property is not defined in command class.', function () {
+    $testCommand = new class () extends PropertyCommand {
+        public PostId $postId;
+    };
+
+    $command = new $testCommand(['title' => 'Command Property Not Defined']);
+})->throws(exception: CommandPropertyNotFoundException::class);
+
+it('should throw a CommandCouldNotBeHandledException.', function () use ($config) {
+    $testCommand = new class () extends PropertyCommand {
+        public string $title;
+    };
+
+    $testCommandHandler = new class () {
+    };
+
+    $resolver = new NativeCommandHandlerResolver(container: ContainerFactory::make(config: $config['container']));
+    $resolver->bindHandler(
+        commandName: $testCommand::class,
+        handler: $testCommandHandler::class
+    );
+
+    $odin = new Odin(bus: new SynchronousCommandBus(resolver: $resolver));
+    $command = new $testCommand(['title' => 'Handle Method Could Not Be Found']);
+
+    $odin->execute(command: $command);
+})->throws(exception: CommandCouldNotBeHandledException::class);

@@ -15,9 +15,7 @@ declare(strict_types=1);
 
 namespace Codefy\Traits;
 
-use Codefy\Domain\Aggregate\EventStream;
 use Codefy\Domain\Aggregate\AggregateId;
-use Codefy\Domain\Aggregate\RecordsEvents;
 
 trait EventSourcedAware
 {

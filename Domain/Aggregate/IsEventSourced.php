@@ -13,18 +13,14 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
+namespace Codefy\Domain\Aggregate;
 
-use Qubus\Exception\Data\TypeException;
-use Qubus\ValueObjects\StringLiteral\StringLiteral;
+use Codefy\Domain\EventSourcing\EventStream;
 
-final class Title extends StringLiteral
+interface IsEventSourced
 {
     /**
-     * @throws TypeException
+     * Reconstitutes an Aggregate instance from its history of domain events.
      */
-    public static function fromString(string $title): self
-    {
-        return new self(value: $title);
-    }
+    public static function reconstituteFromEventStream(EventStream $aggregateHistory): RecordsEvents;
 }

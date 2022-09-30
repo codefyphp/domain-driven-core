@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests\Domain;
+namespace Codefy\Tests;
 
 use Codefy\Domain\Aggregate\AggregateRoot;
 use Codefy\Domain\Aggregate\EventSourcedAggregate;
@@ -29,9 +29,16 @@ final class Post extends EventSourcedAggregate implements AggregateRoot
 
     private Content $content;
 
+    /**
+     * @throws TitleWasNullException
+     */
     public static function createPostWithoutTap(PostId $postId, Title $title, Content $content): Post
     {
-        $post = new self(aggregateId: $postId);
+        if ($title->isEmpty()) {
+            throw new TitleWasNullException(message: 'Title cannot be null.');
+        }
+
+        $post = self::root(aggregateId: $postId);
 
         $post->recordApplyAndPublishThat(
             event: PostWasCreated::withData($postId, $title, $content)
@@ -40,10 +47,17 @@ final class Post extends EventSourcedAggregate implements AggregateRoot
         return $post;
     }
 
+    /**
+     * @throws TitleWasNullException
+     */
     public static function createPostWithTap(PostId $postId, Title $title, Content $content): Post
     {
+        if ($title->isEmpty()) {
+            throw new TitleWasNullException(message: 'Title cannot be null.');
+        }
+
         return tap(
-            value: new self($postId),
+            value: self::root($postId),
             callback: fn($post) => $post->recordApplyAndPublishThat(
                 PostWasCreated::withData(postId: $postId, title: $title, content: $content)
             )
@@ -52,11 +66,17 @@ final class Post extends EventSourcedAggregate implements AggregateRoot
 
     public static function fromNative(PostId $postId): Post
     {
-        return new self(aggregateId: $postId);
+        return self::root(aggregateId: $postId);
     }
 
+    /**S
+     * @throws TitleWasNullException
+     */
     public function changeTitle(Title $title): void
     {
+        if ($title->isEmpty()) {
+            throw new TitleWasNullException(message: 'Title cannot be null.');
+        }
         if ($title->__toString() === $this->title->__toString()) {
             return;
         }

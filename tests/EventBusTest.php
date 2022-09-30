@@ -13,16 +13,14 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
-
 $config = include 'commandbus.php';
 
 use Codefy\CommandBus\Busses\SynchronousCommandBus;
 use Codefy\CommandBus\Containers\ContainerFactory;
 use Codefy\CommandBus\Odin;
 use Codefy\CommandBus\Resolvers\NativeCommandHandlerResolver;
-use Codefy\Tests\CommandBus\CreatePostCommand;
-use Codefy\Tests\CommandBus\CreatePostEventBusCommandHandler;
+use Codefy\Tests\CreatePostCommand;
+use Codefy\Tests\CreatePostEventBusCommandHandler;
 
 $resolver = new NativeCommandHandlerResolver(container: ContainerFactory::make(config: $config['container']));
 

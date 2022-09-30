@@ -53,8 +53,11 @@ final class CommandEventBus implements EventBus
 
     public function publish(DomainEvent ...$events): void
     {
-        foreach ($events as $event) {
-            $this->eventStore->append(event: $event);
+        $transaction = $this->eventStore->commit(...$events);
+
+        $committedEvents = $transaction->committedEvents();
+
+        foreach ($committedEvents as $event) {
             foreach ($this->subscribers as $subscriber) {
                 if ($subscriber->isSubscribedTo($event)) {
                     $subscriber->handle($event);

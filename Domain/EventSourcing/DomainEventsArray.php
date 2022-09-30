@@ -17,7 +17,9 @@ namespace Codefy\Domain\EventSourcing;
 
 use ArrayIterator;
 use Countable;
+use Exception;
 use IteratorAggregate;
+use Qubus\Exception\Data\TypeException;
 use RuntimeException;
 
 use function array_filter;
@@ -25,6 +27,7 @@ use function array_map;
 use function array_merge;
 use function array_values;
 use function count;
+use function iterator_to_array;
 
 abstract class DomainEventsArray implements Countable, IteratorAggregate
 {
@@ -47,11 +50,16 @@ abstract class DomainEventsArray implements Countable, IteratorAggregate
         return new static([]);
     }
 
+    /**
+     * @throws TypeException
+     */
     public static function fromArray(array $events): static
     {
         foreach ($events as $event) {
             if (!$event instanceof DomainEvent) {
-                throw new DomainEventIsImmutableException(message: 'Only instances of DomainEvent are allowed.');
+                throw new TypeException(
+                    message: 'Instance of DomainEvent expected.'
+                );
             }
         }
         return new static(array_values($events));
@@ -82,6 +90,17 @@ abstract class DomainEventsArray implements Countable, IteratorAggregate
         return $this->iterator;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function toArray(): array
+    {
+        return iterator_to_array(iterator: $this->getIterator());
+    }
+
+    /**
+     * @throws TypeException
+     */
     public function map(callable $callback): static
     {
         $events = array_map(callback: $callback, array: $this->events);
@@ -89,6 +108,9 @@ abstract class DomainEventsArray implements Countable, IteratorAggregate
         return static::fromArray(events: $events);
     }
 
+    /**
+     * @throws TypeException
+     */
     public function filter(callable $callback): static
     {
         $events = array_filter(array: $this->events, callback: $callback);
