@@ -33,7 +33,7 @@ class Psr11Container implements Container
     {
         try {
             return $this->container->get($class);
-        } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
+        } catch (NotFoundExceptionInterface | ContainerExceptionInterface $e) {
             return $e;
         }
     }
