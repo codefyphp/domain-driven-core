@@ -3,7 +3,7 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
+ * @link       https://github.com/codefyphp/domain-driven-core
  * @copyright  2022 Joshua Parker <josh@joshuaparker.blog>
  * @copyright  2019 Beau Simensen <beau@dflydev.com>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
