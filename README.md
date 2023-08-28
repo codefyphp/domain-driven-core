@@ -1,6 +1,6 @@
 # Domain Driven Core
 
-This is the core package for the CodefyPHP framework which includes interfaces and abstractions for domain driven 
+Domain Driven Core is the base for the CodefyPHP framework which includes interfaces and abstractions for domain driven 
 development as well as CQRS. You can use the default implementations or use the interfaces to build your own DDD/CQRS
 implementations.
 
