@@ -3,12 +3,10 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
+ * @link       https://github.com/codefyphp/domain-driven-core
  * @copyright  2022
- * @author     Joshua Parker <josh@joshuaparker.blog>
+ * @author     Joshua Parker <joshua@joshuaparker.dev>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -19,15 +17,15 @@ use Codefy\CommandBus\Container;
 use Codefy\QueryBus\Query;
 use Codefy\QueryBus\QueryHandler;
 
-class LazyLoadingQueryHandler implements QueryHandler
+readonly class LazyLoadingQueryHandler implements QueryHandler
 {
     /**
      * @param string $handlerName
      * @param Container $container
      */
     public function __construct(
-        public readonly string $handlerName,
-        public readonly Container $container
+        public string $handlerName,
+        public Container $container
     ) {
     }
 

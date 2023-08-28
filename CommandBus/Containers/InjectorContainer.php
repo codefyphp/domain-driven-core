@@ -3,12 +3,10 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
+ * @link       https://github.com/codefyphp/domain-driven-core
  * @copyright  2022
- * @author     Joshua Parker <josh@joshuaparker.blog>
+ * @author     Joshua Parker <joshua@joshuaparker.dev>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -20,9 +18,9 @@ use Qubus\Exception\Http\Client\NotFoundException;
 use Qubus\Injector\Psr11\Container as InjectorBridgeContainer;
 use Qubus\Injector\Psr11\ContainerException;
 
-class InjectorContainer implements Container
+readonly class InjectorContainer implements Container
 {
-    public function __construct(public readonly InjectorBridgeContainer $container)
+    public function __construct(public InjectorBridgeContainer $container)
     {
     }
 

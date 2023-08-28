@@ -3,12 +3,10 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
+ * @link       https://github.com/codefyphp/domain-driven-core
  * @copyright  2022
- * @author     Joshua Parker <josh@joshuaparker.blog>
+ * @author     Joshua Parker <joshua@joshuaparker.dev>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -19,10 +17,12 @@ use Codefy\CommandBus\Container;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Qubus\Exception\Http\Client\NotFoundException;
+use Qubus\Injector\Psr11\ContainerException;
 
-class Psr11Container implements Container
+readonly class Psr11Container implements Container
 {
-    public function __construct(public readonly ContainerInterface $container)
+    public function __construct(public ContainerInterface $container)
     {
     }
 
@@ -33,7 +33,7 @@ class Psr11Container implements Container
     {
         try {
             return $this->container->get($class);
-        } catch (NotFoundExceptionInterface | ContainerExceptionInterface $e) {
+        } catch (NotFoundException | NotFoundExceptionInterface | ContainerException | ContainerExceptionInterface $e) {
             return $e;
         }
     }

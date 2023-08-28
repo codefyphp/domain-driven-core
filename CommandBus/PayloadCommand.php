@@ -3,12 +3,10 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
+ * @link       https://github.com/codefyphp/domain-driven-core
  * @copyright  2022
- * @author     Joshua Parker <josh@joshuaparker.blog>
+ * @author     Joshua Parker <joshua@joshuaparker.dev>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -16,8 +14,9 @@ declare(strict_types=1);
 namespace Codefy\CommandBus;
 
 use Codefy\CommandBus\Traits\PayloadAware;
+use stdClass;
 
-class PayloadCommand implements Command
+class PayloadCommand extends stdClass implements Command
 {
     use PayloadAware;
 }

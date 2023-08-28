@@ -3,12 +3,10 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
+ * @link       https://github.com/codefyphp/domain-driven-core
  * @copyright  2022
- * @author     Joshua Parker <josh@joshuaparker.blog>
+ * @author     Joshua Parker <joshua@joshuaparker.dev>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -30,7 +28,11 @@ abstract class BaseProjection implements Projection
 
             if (!method_exists(object_or_class: $this, method: $method)) {
                 throw new BadMethodCallException(
-                    sprintf("There is no event named '%s' that can be projected to '%s'.", $method, static::class)
+                    sprintf(
+                        "There is no event named '%s' that can be projected to '%s'.",
+                        $method,
+                        static::class
+                    )
                 );
             }
             $this->$method($event);

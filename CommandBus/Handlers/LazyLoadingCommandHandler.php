@@ -3,12 +3,10 @@
 /**
  * CodefyPHP
  *
- * @link       https://github.com/codefyphp/codefy
- * @copyright  2022 Joshua Parker <josh@joshuaparker.blog>
+ * @link       https://github.com/codefyphp/domain-driven-core
+ * @copyright  2022 Joshua Parker <joshua@joshuaparker.dev>
  * @copyright  2015 Adam Nicholson <adamnicholson10@gmail.com>
  * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
  */
 
 declare(strict_types=1);
@@ -24,13 +22,13 @@ use function get_class;
 use function method_exists;
 use function sprintf;
 
-class LazyLoadingCommandHandler implements CommandHandler
+readonly class LazyLoadingCommandHandler implements CommandHandler
 {
     /**
      * @param string $handlerName
      * @param Container $container
      */
-    public function __construct(public readonly string $handlerName, public readonly Container $container)
+    public function __construct(public string $handlerName, public Container $container)
     {
     }
 
