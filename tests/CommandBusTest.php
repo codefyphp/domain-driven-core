@@ -148,11 +148,11 @@ it('should handle itself when implementing CommandHandler.', function () {
     expect(value: $command->productName())->toEqual(expected: 'Macbook Pro 2016');
 });
 
-it('should throw an implementation of NotFoundExceptionInterface.', function () {
+it('should expect a NotFoundException message.', function () {
     $exception = (new Psr11Container(new Container(new InjectorConfig([]))))->make(class: 'User');
 
     expect(value: 'No entry found: User')->toEqual(expected: $exception->getMessage());
-})->throws(exception: NotFoundException::class);
+});
 
 it('should return defined property.', function () {
     $testCommand = new class () extends PropertyCommand {

@@ -1,16 +1,5 @@
 <?php
 
-/**
- * CodefyPHP
- *
- * @link       https://github.com/codefyphp/codefy
- * @copyright  2022
- * @author     Joshua Parker <josh@joshuaparker.blog>
- * @license    https://opensource.org/licenses/mit-license.php MIT License
- *
- * @since      0.1.0
- */
-
 declare(strict_types=1);
 
 namespace Codefy\Tests;
@@ -31,7 +20,7 @@ final class PostSubscriber implements DomainEventSubscriber
     {
     }
 
-    public function handle(TitleWasChanged|PostWasCreated $event)
+    public function handle(TitleWasChanged|PostWasCreated $event): void
     {
         match (true) {
             get_class($event) === PostWasCreated::class => $this->projection->projectWhenPostWasCreated(
