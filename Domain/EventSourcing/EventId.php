@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Codefy\Domain\EventSourcing;
 
 use Qubus\Exception\Data\TypeException;
-use Qubus\ValueObjects\Identity\Uuid;
+use Qubus\ValueObjects\Identity\Ulid;
 use Qubus\ValueObjects\ValueObject;
 
-class EventId extends Uuid implements ValueObject
+class EventId extends Ulid implements ValueObject
 {
     /**
      * @throws TypeException

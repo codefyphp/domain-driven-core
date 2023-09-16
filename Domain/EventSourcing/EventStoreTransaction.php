@@ -16,12 +16,12 @@ namespace Codefy\Domain\EventSourcing;
 /**
  * Code originated at https://github.com/beberlei/litecqrs-php/
  */
-final class EventStoreTransaction implements Transactional
+final readonly class EventStoreTransaction implements Transactional
 {
     public function __construct(
-        public readonly TransactionId $transactionId,
-        public readonly DomainEvents $eventStream,
-        public readonly array $committedEvents
+        public TransactionId $transactionId,
+        public DomainEvents $eventStream,
+        public array $committedEvents
     ) {
     }
 
