@@ -23,7 +23,7 @@ try {
 }
 
 $aggregateRootId = new PostId(value: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f');
-$eventId = new EventId(value: 'bef2bce0-c690-415c-9901-1b26db1928d3');
+$eventId = new EventId(value: '01HADYD4FYEC7SY7DTTCKTMXVT');
 
 $eventWithData = TitleWasChanged::withData(
     postId: $aggregateRootId,
