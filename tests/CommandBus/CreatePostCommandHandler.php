@@ -2,11 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Codefy\Tests;
+namespace Codefy\Tests\CommandBus;
 
 use Codefy\CommandBus\Command;
 use Codefy\CommandBus\CommandHandler;
 use Codefy\Domain\Aggregate\AggregateRepository;
+use Codefy\Tests\Domain\Content;
+use Codefy\Tests\Domain\Post;
+use Codefy\Tests\Domain\PostId;
+use Codefy\Tests\Domain\Title;
+use Codefy\Tests\Domain\TitleWasNullException;
 use Qubus\Exception\Data\TypeException;
 
 readonly class CreatePostCommandHandler implements CommandHandler

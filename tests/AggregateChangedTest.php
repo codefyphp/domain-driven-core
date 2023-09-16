@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\EventSourcing\AggregateChanged;
 use Codefy\Domain\EventSourcing\DomainEvent;
-use Codefy\Tests\PostId;
+use Codefy\Tests\Domain\PostId;
 use PHPUnit\Framework\Assert;
 
 it('should have AggregateId after construct.', function () {
