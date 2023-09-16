@@ -8,8 +8,8 @@ use Codefy\CommandBus\Busses\SynchronousCommandBus;
 use Codefy\CommandBus\Containers\ContainerFactory;
 use Codefy\CommandBus\Odin;
 use Codefy\CommandBus\Resolvers\NativeCommandHandlerResolver;
-use Codefy\Tests\CreatePostCommand;
-use Codefy\Tests\CreatePostEventBusCommandHandler;
+use Codefy\Tests\CommandBus\CreatePostCommand;
+use Codefy\Tests\CommandBus\CreatePostEventBusCommandHandler;
 
 $resolver = new NativeCommandHandlerResolver(container: ContainerFactory::make(config: $config['container']));
 

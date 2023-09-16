@@ -8,11 +8,11 @@ use Codefy\Domain\EventSourcing\CorruptEventStreamException;
 use Codefy\Domain\EventSourcing\EventStream;
 use Codefy\Domain\EventSourcing\EventStreamIsEmptyException;
 use Codefy\Domain\EventSourcing\InMemoryEventStore;
-use Codefy\Tests\Content;
-use Codefy\Tests\InMemoryPostProjection;
-use Codefy\Tests\Post;
-use Codefy\Tests\PostId;
-use Codefy\Tests\Title;
+use Codefy\Tests\Domain\Content;
+use Codefy\Tests\Domain\InMemoryPostProjection;
+use Codefy\Tests\Domain\Post;
+use Codefy\Tests\Domain\PostId;
+use Codefy\Tests\Domain\Title;
 use PHPUnit\Framework\Assert;
 
 $repository = new EventSourcedAggregateRepository(

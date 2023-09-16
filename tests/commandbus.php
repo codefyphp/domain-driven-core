@@ -10,9 +10,9 @@ use Codefy\EventBus\CommandEventBus;
 use Codefy\EventBus\DomainEventPublisher;
 use Codefy\EventBus\EventBus;
 use Codefy\EventBus\NullPublisher;
-use Codefy\Tests\InMemoryPostProjection;
-use Codefy\Tests\PostProjection;
-use Codefy\Tests\PostRepository;
+use Codefy\Tests\Domain\InMemoryPostProjection;
+use Codefy\Tests\Domain\PostProjection;
+use Codefy\Tests\Domain\PostRepository;
 use Qubus\Injector\Injector;
 
 return [

@@ -44,8 +44,7 @@
   "autoload-dev": {
     "psr-4": {
       "Codefy\\Tests\\": [
-        "tests/CommandBus",
-        "tests/Domain"
+        "tests/"
       ]
     }
   },
