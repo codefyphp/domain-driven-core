@@ -37,15 +37,14 @@
     "qubus/qubus-coding-standard": "^1.1"
   },
   "autoload": {
+    "exclude-from-classmap": ["/tests/"],
     "psr-4": {
       "Codefy\\": ""
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Codefy\\Tests\\": [
-        "tests/"
-      ]
+      "Codefy\\Tests\\": "tests/"
     }
   },
   "scripts": {
