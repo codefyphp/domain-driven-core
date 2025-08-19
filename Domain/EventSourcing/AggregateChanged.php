@@ -27,7 +27,7 @@ use function Qubus\Support\Helpers\is_null__;
  */
 class AggregateChanged implements DomainEvent
 {
-    public const DATE_FORMAT = 'Y-m-d H:i:s.u';
+    public const string DATE_FORMAT = 'Y-m-d H:i:s.u';
     public readonly ?array $payload;
     protected ?array $metadata;
     protected ?DateTimeInterface $recordedAt = null;

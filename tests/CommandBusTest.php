@@ -148,7 +148,7 @@ it('should handle itself when implementing CommandHandler.', function () {
 });
 
 it('should expect a NotFoundException message.', function () {
-    $exception = (new Psr11Container(new Container(new InjectorConfig([]))))->make(class: 'User');
+    $exception = new Psr11Container(new Container(new InjectorConfig([])))->make(className: 'User');
 
     expect(value: 'No entry found: User')->toEqual(expected: $exception->getMessage());
 });

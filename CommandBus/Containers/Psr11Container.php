@@ -29,10 +29,10 @@ readonly class Psr11Container implements Container
     /**
      * {@inheritDoc}
      */
-    public function make($class): mixed
+    public function make(string $className): mixed
     {
         try {
-            return $this->container->get($class);
+            return $this->container->get($className);
         } catch (NotFoundException | NotFoundExceptionInterface | ContainerException | ContainerExceptionInterface $e) {
             return $e;
         }

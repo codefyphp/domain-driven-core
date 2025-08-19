@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Codefy\CommandBus\Containers;
 
 use Codefy\CommandBus\Container;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Qubus\Exception\Http\Client\NotFoundException;
 use Qubus\Injector\Psr11\Container as InjectorBridgeContainer;
 use Qubus\Injector\Psr11\ContainerException;
@@ -31,7 +33,7 @@ readonly class InjectorContainer implements Container
     {
         try {
             return $this->container->get($class);
-        } catch (NotFoundException | ContainerException $e) {
+        } catch (NotFoundException | ContainerException | NotFoundExceptionInterface | ContainerExceptionInterface $e) {
             return $e;
         }
     }
