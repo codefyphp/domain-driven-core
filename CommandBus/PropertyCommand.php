@@ -40,7 +40,7 @@ abstract class PropertyCommand implements Command
     {
         foreach ($data as $key => $value) {
             if (!property_exists($this, $key)) {
-                $command = (new ReflectionClass($this))->getShortName();
+                $command = new ReflectionClass($this)->getShortName();
                 throw new CommandPropertyNotFoundException(
                     message: sprintf(
                         '$this->%s is not a valid property in %s',

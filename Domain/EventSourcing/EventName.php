@@ -44,7 +44,7 @@ class EventName
      */
     private function parseName(): StringLiteral
     {
-        $className = (new ReflectionClass($this->event))->getShortName();
+        $className = new ReflectionClass($this->event)->getShortName();
 
         return new StringLiteral($className);
     }

@@ -53,7 +53,7 @@ final class CommandEventBus implements EventBus
     {
         $transaction = $this->eventStore->commit(...$events);
 
-        $committedEvents = $transaction->committedEvents();
+        $committedEvents = $transaction->committedEvents;
 
         foreach ($committedEvents as $event) {
             foreach ($this->subscribers as $subscriber) {

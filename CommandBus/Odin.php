@@ -43,7 +43,7 @@ class Odin implements CommandBus
     /**
      * Push a new Decorator on to the stack.
      */
-    public function pushDecorator(Decorator $decorator)
+    public function pushDecorator(Decorator $decorator): void
     {
         $decorator->setInnerBus(bus: $this->bus);
         $this->bus = $decorator;

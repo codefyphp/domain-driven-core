@@ -34,14 +34,16 @@ use function sprintf;
 
 class NativeCommandHandlerResolver implements CommandHandlerResolver
 {
-    protected Container $container;
-
     protected array $handlers = [];
 
-    public function __construct(?Container $container = null)
-    {
-        $this->container = $container ?: new NativeContainer();
+    //phpcs:disable
+    public function __construct(protected ?Container $container = null {
+        get => $this->container ?? new NativeContainer();
+        set(Container|null $value) => $this->container = $value;
     }
+    ) {
+    }
+    //phpcs:enable
 
     /**
      * Retrieve a CommandHandler for a given Command

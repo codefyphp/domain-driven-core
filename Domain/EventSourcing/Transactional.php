@@ -15,10 +15,12 @@ namespace Codefy\Domain\EventSourcing;
 
 interface Transactional
 {
-    public function eventStream(): DomainEvents;
-
+    //phpcs:disable
+    public TransactionId $transactionId { get; set; }
     /**
      * @return DomainEvent[]
      */
-    public function committedEvents(): array;
+    public DomainEvents $eventStream { get; set; }
+    public array $committedEvents { get; set; }
+    //phpcs:enable
 }

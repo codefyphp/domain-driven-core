@@ -29,10 +29,10 @@ readonly class InjectorContainer implements Container
     /**
      * {@inheritDoc}
      */
-    public function make($class): mixed
+    public function make(string $className): mixed
     {
         try {
-            return $this->container->get($class);
+            return $this->container->get($className);
         } catch (NotFoundException | ContainerException | NotFoundExceptionInterface | ContainerExceptionInterface $e) {
             return $e;
         }

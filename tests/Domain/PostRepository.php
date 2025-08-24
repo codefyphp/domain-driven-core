@@ -53,7 +53,7 @@ final class PostRepository implements AggregateRepository
 
         $transaction = $this->eventStore->commit(...$events);
 
-        $committedEvents = $transaction->committedEvents();
+        $committedEvents = $transaction->committedEvents;
 
         $this->projection->project(...$committedEvents);
 

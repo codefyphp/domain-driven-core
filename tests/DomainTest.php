@@ -130,8 +130,8 @@ it('should retrieve all events from the event store based on aggregate id.', fun
     $aggregateHistory = $iterator->toArray();
 
     foreach ($aggregateHistory as $event) {
-        expect(value: $post->title())->toEqual(expected: $event->title());
-        expect(value: $post->aggregateId())->toEqual(expected: $event->aggregateId());
+        expect(value: $post->title())->toEqual(expected: $event->title())
+            ->and(value: $post->aggregateId())->toEqual(expected: $event->aggregateId());
     }
 });
 
@@ -149,9 +149,9 @@ it('should return an event store transaction.', function () {
 
     $transaction = $eventStore->commit(...iterator_to_array($events));
 
-    expect(value: $transaction)->toBeInstanceOf(class: Transactional::class);
-    expect(value: $transaction->eventStream())->toBeInstanceOf(class: DomainEvents::class);
-    expect(value: $post->pullDomainEvents())->toEqual(expected: $transaction->committedEvents());
+    expect(value: $transaction)->toBeInstanceOf(class: Transactional::class)
+        ->and(value: $transaction->eventStream)->toBeInstanceOf(class: DomainEvents::class)
+        ->and(value: $post->pullDomainEvents())->toEqual(expected: $transaction->committedEvents);
 });
 
 /**
@@ -257,7 +257,7 @@ it('should reconstitute a Post with tap() to its state after persisting it.', fu
 it('should be the same Post object when using PostFactory.', function () {
     $postId = new PostId(value: '1cf57c2c-5c82-45a0-8a42-f0b725cfc42f');
 
-    $post = (new PostFactory())->create(aggregateId: $postId);
+    $post = new PostFactory()->create(aggregateId: $postId);
 
     Assert::assertInstanceOf(expected: Post::class, actual: $post);
 });

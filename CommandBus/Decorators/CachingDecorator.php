@@ -19,6 +19,7 @@ use Codefy\CommandBus\Command;
 use Codefy\CommandBus\CommandBus;
 use Codefy\CommandBus\Decorator;
 use Codefy\CommandBus\HasCacheOptions;
+use phpseclib3\Crypt\EC\Curves\secp112r1;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
@@ -28,21 +29,24 @@ use function serialize;
 
 class CachingDecorator implements Decorator
 {
-    private ?CommandBus $innerBus;
-
-    private CacheItemPoolInterface $cache;
-
-    private int $expiresAfter;
-
+    //phpcs:disable
     public function __construct(
-        CacheItemPoolInterface $cache,
-        int $expiresAfter = 3600,
-        ?CommandBus $innerCommandBus = null
+        protected CacheItemPoolInterface $cache
+        {
+            get => $this->cache;
+            set(CacheItemPoolInterface $value) => $this->cache = $value;
+        },
+        protected int $expiresAfter {
+            get => $this->expiresAfter ?? 3600;
+            set(int $value) => $this->expiresAfter = $value;
+        },
+        protected CommandBus $innerBus {
+            get => $this->innerBus ?? new SynchronousCommandBus();
+            set(CommandBus $value) => $this->innerBus = $value;
+        }
     ) {
-        $this->cache = $cache;
-        $this->expiresAfter = $expiresAfter;
-        $this->setInnerBus(bus: $innerCommandBus ?: new SynchronousCommandBus());
     }
+    //phpcs:enable
 
     /**
      * @inheritDoc

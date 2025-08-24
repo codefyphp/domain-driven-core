@@ -58,7 +58,7 @@ class EventSourcedAggregateRepository implements AggregateRepository
 
         $aggregate->clearRecordedEvents();
 
-        $committedEvents = $transaction->committedEvents();
+        $committedEvents = $transaction->committedEvents;
 
         $this->projection->project(...$committedEvents);
 

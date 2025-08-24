@@ -16,30 +16,23 @@ namespace Codefy\Domain\EventSourcing;
 /**
  * Code originated at https://github.com/beberlei/litecqrs-php/
  */
-final readonly class EventStoreTransaction implements Transactional
+final class EventStoreTransaction implements Transactional
 {
+    //phpcs:disable
     public function __construct(
-        public TransactionId $transactionId,
-        public DomainEvents $eventStream,
-        public array $committedEvents
+        public TransactionId $transactionId {
+            get => $this->transactionId;
+            set(TransactionId $value) => $this->transactionId = $value;
+        },
+        public DomainEvents $eventStream {
+            get => $this->eventStream;
+            set(DomainEvents $value) => $this->eventStream = $value;
+        },
+        public array $committedEvents {
+            get => $this->committedEvents;
+            set(array $value) => $this->committedEvents = $value;
+        }
     ) {
     }
-
-    public function transactionId(): TransactionId
-    {
-        return $this->transactionId;
-    }
-
-    public function eventStream(): DomainEvents
-    {
-        return $this->eventStream;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function committedEvents(): array
-    {
-        return $this->committedEvents;
-    }
+    //phpcs:enable
 }

@@ -34,19 +34,21 @@ use function sprintf;
 
 class NativeQueryHandlerResolver implements QueryHandlerResolver
 {
-    protected Container $container;
-
     protected array $handlers = [];
 
-    public function __construct(?Container $container = null)
-    {
-        $this->container = $container ?: new NativeContainer();
+    //phpcs:disable
+    public function __construct(protected ?Container $container = null {
+        get => $this->container ?? new NativeContainer();
+        set(Container|null $value) => $this->container = $value;
     }
+    ) {
+    }
+    //phpcs:enable
 
     /**
      * Retrieve a QueryHandler for a given Command
      *
-     * @throws UnresolvableQueryHandlerException|ReflectionException
+     * @throws UnresolvableQueryHandlerException
      */
     public function resolve(Query $query): QueryHandler
     {
