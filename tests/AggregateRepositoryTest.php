@@ -3,19 +3,19 @@
 declare(strict_types=1);
 
 use Codefy\Domain\Aggregate\AggregateRepository;
-use Codefy\Domain\Aggregate\EventSourcedAggregateRepository;
 use Codefy\Domain\EventSourcing\CorruptEventStreamException;
 use Codefy\Domain\EventSourcing\EventStream;
 use Codefy\Domain\EventSourcing\EventStreamIsEmptyException;
 use Codefy\Domain\EventSourcing\InMemoryEventStore;
 use Codefy\Tests\Domain\Content;
+use Codefy\Tests\Domain\EventSourcedPostRepository;
 use Codefy\Tests\Domain\InMemoryPostProjection;
 use Codefy\Tests\Domain\Post;
 use Codefy\Tests\Domain\PostId;
 use Codefy\Tests\Domain\Title;
 use PHPUnit\Framework\Assert;
 
-$repository = new EventSourcedAggregateRepository(
+$repository = new EventSourcedPostRepository(
     eventStore: new InMemoryEventStore(),
     projection: new InMemoryPostProjection()
 );
