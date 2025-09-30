@@ -22,17 +22,15 @@
   ],
   "require": {
     "php": ">=8.4",
-    "qubus/event-dispatcher": "^3",
+    "qubus/event-dispatcher": "^4",
     "qubus/exception": "^3",
     "qubus/injector": "^3",
     "qubus/valueobjects": "^3"
   },
   "require-dev": {
-    "mockery/mockery": "^1",
-    "pestphp/pest": "^3",
     "qubus/cache": "^3",
     "qubus/log": "^3",
-    "qubus/qubus-coding-standard": "^1"
+    "qubus/qubus-coding-standard": "^2"
   },
   "autoload": {
     "exclude-from-classmap": ["/tests/"],
