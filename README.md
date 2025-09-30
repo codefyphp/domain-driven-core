@@ -6,7 +6,7 @@ implementations.
 
 ## Requirement
 
-PHP 8.2+
+PHP 8.4+
 
 ## Installation
 

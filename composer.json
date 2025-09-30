@@ -23,13 +23,13 @@
   "require": {
     "php": ">=8.4",
     "qubus/event-dispatcher": "^4",
-    "qubus/exception": "^3",
-    "qubus/injector": "^3",
-    "qubus/valueobjects": "^3"
+    "qubus/exception": "^4",
+    "qubus/injector": "^4",
+    "qubus/valueobjects": "^4"
   },
   "require-dev": {
-    "qubus/cache": "^3",
-    "qubus/log": "^3",
+    "qubus/cache": "^4",
+    "qubus/log": "^4",
     "qubus/qubus-coding-standard": "^2"
   },
   "autoload": {
