@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * CodefyPHP
+ *
+ * @link       https://github.com/codefyphp/domain-driven-core
+ * @copyright  2022 Joshua Parker <josh@joshuaparker.blog>
+ * @copyright  2019 Beau Simensen <beau@dflydev.com>
+ * @license    https://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @since      0.1.0
+ */
+
+declare(strict_types=1);
+
+namespace Codefy\CommandBus;
+
+use Qubus\Exception\Data\TypeException;
+use Qubus\Exception\Exception;
+
+use function array_map;
+use function count;
+use function implode;
+use function sprintf;
+
+class InvalidPayloadException extends TypeException
+{
+    /**
+     * @throws Exception
+     */
+    public static function missingRequiredFields(string ...$fields): self
+    {
+        $string = implode(
+            separator: ',',
+            array: array_map(function ($field) {
+                return sprintf('%s', $field);
+            }, array: $fields)
+        );
+
+        $label = count($fields) === 1 ? 'field' : 'fields';
+
+        return new self(sprintf('Payload is missing required %s: %s.', $label, $string));
+    }
+}

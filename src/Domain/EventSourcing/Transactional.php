@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * CodefyPHP
+ *
+ * @link       https://github.com/codefyphp/domain-driven-core
+ * @copyright  2022
+ * @author     Joshua Parker <joshua@joshuaparker.dev>
+ * @license    https://opensource.org/licenses/mit-license.php MIT License
+ */
+
+declare(strict_types=1);
+
+namespace Codefy\Domain\EventSourcing;
+
+interface Transactional
+{
+    //phpcs:disable
+    public TransactionId $transactionId { get; set; }
+    /**
+     * @return DomainEvent[]
+     */
+    public DomainEvents $eventStream { get; set; }
+    /** @var array<DomainEvent> $committedEvents */
+    public array $committedEvents { get; set; }
+    //phpcs:enable
+}
