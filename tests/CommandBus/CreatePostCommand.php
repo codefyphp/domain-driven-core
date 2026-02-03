@@ -8,9 +8,9 @@ use Codefy\CommandBus\PayloadCommand;
 
 class CreatePostCommand extends PayloadCommand
 {
-    public const POST_ID = 'postId';
-    public const POST_TITLE = 'postTitle';
-    public const POST_CONTENT = 'postContent';
+    public const string POST_ID = 'postId';
+    public const string POST_TITLE = 'postTitle';
+    public const string POST_CONTENT = 'postContent';
 
     protected static array $REQUIRED_FIELDS = [
         self::POST_ID,

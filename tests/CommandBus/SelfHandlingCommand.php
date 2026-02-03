@@ -10,8 +10,8 @@ use Codefy\CommandBus\PayloadCommand;
 
 class SelfHandlingCommand extends PayloadCommand implements Command, CommandHandler
 {
-    public const PRODUCT_ID = 'productId';
-    public const PRODUCT_NAME = 'productName';
+    public const string PRODUCT_ID = 'productId';
+    public const string PRODUCT_NAME = 'productName';
 
     protected static array $REQUIRED_FIELDS = [
         self::PRODUCT_ID,

@@ -7,6 +7,7 @@ namespace Codefy\Tests\CommandBus;
 use Codefy\Domain\Aggregate\AggregateNotFoundException;
 use Codefy\Domain\Aggregate\AggregateRepository;
 use Codefy\Domain\Aggregate\MultipleInstancesOfAggregateDetectedException;
+use Codefy\Tests\Domain\PostId;
 use Codefy\Tests\Domain\TitleWasChanged;
 use Qubus\Exception\Data\TypeException;
 

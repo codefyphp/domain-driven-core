@@ -8,8 +8,8 @@ use Codefy\CommandBus\PayloadCommand;
 
 class ChangeTitleCommand extends PayloadCommand
 {
-    public const POST_ID = 'postId';
-    public const POST_TITLE = 'postTitle';
+    public const string POST_ID = 'postId';
+    public const string POST_TITLE = 'postTitle';
 
     protected static array $REQUIRED_FIELDS = [
         self::POST_ID,

@@ -21,7 +21,8 @@ readonly class CreatePostCommandHandler implements CommandHandler
     }
 
     /**
-     * @throws TypeException|TitleWasNullException
+     * @throws TypeException
+     * @throws TitleWasNullException
      */
     public function handle(Command $command): void
     {
