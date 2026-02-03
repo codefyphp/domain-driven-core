@@ -28,6 +28,7 @@
     "qubus/valueobjects": "^4"
   },
   "require-dev": {
+    "phpstan/phpstan": "^2.1",
     "qubus/cache": "^4",
     "qubus/log": "^4",
     "qubus/qubus-coding-standard": "^2"
@@ -35,7 +36,7 @@
   "autoload": {
     "exclude-from-classmap": ["/tests/"],
     "psr-4": {
-      "Codefy\\": ""
+      "Codefy\\": "src/"
     }
   },
   "autoload-dev": {
@@ -46,7 +47,8 @@
   "scripts": {
     "test": "vendor/bin/pest",
     "cs-check": "phpcs",
-    "cs-fix": "phpcbf"
+    "cs-fix": "phpcbf",
+    "codestan": "phpstan analyse -l 5"
   },
   "config": {
     "optimize-autoloader": true,
