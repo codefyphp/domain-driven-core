@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Codefy\CommandBus;
 
 use Codefy\CommandBus\Traits\PayloadAware;
-use stdClass;
 
 /** @phpstan-consistent-constructor  */
-class PayloadCommand extends stdClass implements Command
+class PayloadCommand extends \stdClass implements Command
 {
     use PayloadAware;
 }

@@ -22,7 +22,6 @@ use Codefy\QueryBus\QueryHandler;
 use Codefy\QueryBus\QueryHandlerResolver;
 use Codefy\QueryBus\UnresolvableQueryHandlerException;
 use Qubus\Exception\Data\TypeException;
-use ReflectionException;
 
 use function array_pop;
 use function class_exists;
@@ -50,7 +49,7 @@ class NativeQueryHandlerResolver implements QueryHandlerResolver
      * Retrieve a QueryHandler for a given Command
      *
      * @throws UnresolvableQueryHandlerException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function resolve(Query $query): QueryHandler
     {

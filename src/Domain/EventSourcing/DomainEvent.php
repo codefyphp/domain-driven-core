@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Codefy\Domain\EventSourcing;
 
 use Codefy\Domain\Aggregate\AggregateId;
-use DateTimeInterface;
 
 /**
  * Something that happened in the past and that is of importance to the business.
@@ -29,9 +28,9 @@ interface DomainEvent
     /**
      * Date the event was recorded on.
      *
-     * @return ?DateTimeInterface
+     * @return ?\DateTimeInterface
      */
-    public function recordedAt(): ?DateTimeInterface;
+    public function recordedAt(): ?\DateTimeInterface;
 
     /**
      * Append event version.

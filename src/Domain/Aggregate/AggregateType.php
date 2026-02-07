@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\Aggregate;
 
-use Closure;
-
 use function array_map;
 use function end;
 use function explode;
@@ -38,7 +36,7 @@ final class AggregateType
         ?callable $callback = null,
         string $delimiter = '-'
     ): string {
-        $callback = $callback instanceof Closure
+        $callback = $callback instanceof \Closure
         ? $callback
         : static fn (string $value): string => strtolower($value);
 

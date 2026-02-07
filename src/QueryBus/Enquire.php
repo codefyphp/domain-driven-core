@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Codefy\QueryBus;
 
 use Codefy\QueryBus\Busses\SynchronousQueryBus;
-use ReflectionException;
 
 class Enquire implements QueryBus
 {
@@ -31,7 +30,7 @@ class Enquire implements QueryBus
      * Execute a query.
      *
      * @throws UnresolvableQueryHandlerException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function execute(Query $query): mixed
     {

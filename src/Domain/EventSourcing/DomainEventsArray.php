@@ -13,12 +13,6 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\EventSourcing;
 
-use ArrayIterator;
-use Countable;
-use Exception;
-use IteratorAggregate;
-use RuntimeException;
-
 use function array_filter;
 use function array_map;
 use function array_merge;
@@ -27,14 +21,14 @@ use function count;
 use function iterator_to_array;
 
 /**
- * @template-implements IteratorAggregate<array-key, mixed>
+ * @template-implements \IteratorAggregate<array-key, mixed>
  */
-abstract class DomainEventsArray implements Countable, IteratorAggregate
+abstract class DomainEventsArray implements \Countable, \IteratorAggregate
 {
     /** @var array<DomainEvent> $events  */
     private array $events;
-    /** @var ArrayIterator<int|string, DomainEvent> */
-    private ArrayIterator $iterator;
+    /** @var \ArrayIterator<int|string, DomainEvent> */
+    private \ArrayIterator $iterator;
 
     /**
      * @param array<DomainEvent> $events
@@ -42,7 +36,7 @@ abstract class DomainEventsArray implements Countable, IteratorAggregate
     protected function __construct(array $events)
     {
         $this->events = $events;
-        $this->iterator = new ArrayIterator(array: $events);
+        $this->iterator = new \ArrayIterator(array: $events);
     }
 
     final public function count(): int
@@ -84,16 +78,16 @@ abstract class DomainEventsArray implements Countable, IteratorAggregate
     }
 
     /**
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
-    public function getIterator(): ArrayIterator
+    public function getIterator(): \ArrayIterator
     {
         return $this->iterator;
     }
 
     /**
      * @return array<mixed>
-     * @throws Exception
+     * @throws \Exception
      */
     public function toArray(): array
     {
@@ -117,7 +111,7 @@ abstract class DomainEventsArray implements Countable, IteratorAggregate
     public function getFirstEvent(): DomainEvent
     {
         if ($this->isEmpty()) {
-            throw new RuntimeException(message: 'Cannot return first event because DomainEvents array is empty.');
+            throw new \RuntimeException(message: 'Cannot return first event because DomainEvents array is empty.');
         }
 
         return $this->events[0];

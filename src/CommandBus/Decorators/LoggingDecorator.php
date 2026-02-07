@@ -20,7 +20,6 @@ use Codefy\CommandBus\Decorator;
 use Codefy\CommandBus\Traits\InnerBusAware;
 use Psr\Log\LoggerInterface;
 use Qubus\Exception\Exception;
-use Stringable;
 
 use function serialize;
 use function sprintf;
@@ -82,7 +81,7 @@ class LoggingDecorator implements Decorator
         return $response;
     }
 
-    protected function log(string|Stringable $message, Command $command): void
+    protected function log(string|\Stringable $message, Command $command): void
     {
         $context = $this->context ? serialize(value: $this->context) : null;
         $this->logger->debug(

@@ -15,7 +15,6 @@ namespace Codefy\CommandBus;
 
 use Codefy\CommandBus\Busses\SynchronousCommandBus;
 use Codefy\CommandBus\Exceptions\UnresolvableCommandHandlerException;
-use ReflectionException;
 
 /**
  * The main Odin class is a CommandBus, which is effectively a decorator
@@ -48,7 +47,7 @@ class Odin implements CommandBus
      * Execute a command.
      *
      * @throws UnresolvableCommandHandlerException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function execute(Command $command): mixed
     {

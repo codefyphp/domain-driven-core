@@ -22,7 +22,6 @@ use Codefy\CommandBus\Exceptions\UnresolvableCommandHandlerException;
 use Codefy\CommandBus\Handlers\CallableCommandHandler;
 use Codefy\CommandBus\Handlers\LazyLoadingCommandHandler;
 use Qubus\Exception\Data\TypeException;
-use ReflectionException;
 
 use function array_pop;
 use function class_exists;
@@ -49,7 +48,7 @@ class NativeCommandHandlerResolver implements CommandHandlerResolver
      * Retrieve a CommandHandler for a given Command
      *
      * @throws UnresolvableCommandHandlerException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function resolve(Command $command): CommandHandler
     {

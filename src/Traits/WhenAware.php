@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Codefy\Traits;
 
-use BadMethodCallException;
 use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\DomainEvents;
 use Codefy\Domain\EventSourcing\EventName;
@@ -28,7 +27,7 @@ trait WhenAware
         $method = sprintf('when%s', new EventName($event));
 
         if (!method_exists($this, $method)) {
-            throw new BadMethodCallException(
+            throw new \BadMethodCallException(
                 sprintf("There is no method named '%s' that can be called in '%s'.", $method, static::class)
             );
         }

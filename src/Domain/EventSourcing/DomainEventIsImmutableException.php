@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\EventSourcing;
 
-use BadMethodCallException;
-
-final class DomainEventIsImmutableException extends BadMethodCallException
+final class DomainEventIsImmutableException extends \BadMethodCallException
 {
 }

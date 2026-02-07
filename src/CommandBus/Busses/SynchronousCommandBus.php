@@ -18,7 +18,6 @@ use Codefy\CommandBus\CommandBus;
 use Codefy\CommandBus\CommandHandlerResolver;
 use Codefy\CommandBus\Exceptions\UnresolvableCommandHandlerException;
 use Codefy\CommandBus\Resolvers\NativeCommandHandlerResolver;
-use ReflectionException;
 
 class SynchronousCommandBus implements CommandBus
 {
@@ -30,7 +29,7 @@ class SynchronousCommandBus implements CommandBus
      * Execute a command.
      *
      * @throws UnresolvableCommandHandlerException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function execute(Command $command): mixed
     {

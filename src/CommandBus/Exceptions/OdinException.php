@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Codefy\CommandBus\Exceptions;
 
-use Exception;
-
-abstract class OdinException extends Exception
+abstract class OdinException extends \Exception
 {
 }

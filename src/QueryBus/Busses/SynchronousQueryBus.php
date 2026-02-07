@@ -18,7 +18,6 @@ use Codefy\QueryBus\QueryBus;
 use Codefy\QueryBus\QueryHandlerResolver;
 use Codefy\QueryBus\Resolvers\NativeQueryHandlerResolver;
 use Codefy\QueryBus\UnresolvableQueryHandlerException;
-use ReflectionException;
 
 class SynchronousQueryBus implements QueryBus
 {
@@ -30,7 +29,7 @@ class SynchronousQueryBus implements QueryBus
      * Execute a command.
      *
      * @throws UnresolvableQueryHandlerException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function execute(Query $query): mixed
     {

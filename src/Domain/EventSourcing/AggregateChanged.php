@@ -16,7 +16,6 @@ namespace Codefy\Domain\EventSourcing;
 use Codefy\Domain\Aggregate\AggregateId;
 use Codefy\Domain\Aggregate\AggregateType;
 use Codefy\Domain\Metadata;
-use DateTimeInterface;
 use Qubus\Support\DateTime\QubusDateTimeImmutable;
 use Qubus\Support\DateTime\QubusDateTimeZone;
 
@@ -32,7 +31,7 @@ class AggregateChanged implements DomainEvent
     public ?array $payload = [];
     /** @var array<mixed>|null $metadata */
     protected ?array $metadata = [];
-    protected ?DateTimeInterface $recordedAt = null;
+    protected ?\DateTimeInterface $recordedAt = null;
 
     /**
      * @param AggregateId $aggregateId
@@ -129,7 +128,7 @@ class AggregateChanged implements DomainEvent
     /**
      * {@inheritDoc}
      */
-    public function recordedAt(): ?DateTimeInterface
+    public function recordedAt(): ?\DateTimeInterface
     {
         return $this->recordedAt;
     }

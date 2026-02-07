@@ -14,19 +14,17 @@ declare(strict_types=1);
 namespace Codefy\CommandBus\Containers;
 
 use Codefy\CommandBus\Container;
-use ReflectionClass;
-use ReflectionException;
 
 class NativeContainer implements Container
 {
     /**
      * {@inheritDoc}
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function make(string $className): ?object
     {
         // Use reflection to get the list of constructor dependencies
-        $class = new ReflectionClass($className);
+        $class = new \ReflectionClass($className);
         $constructor = $class->getConstructor();
 
         // if no constructor, pop smoke and move out!

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Codefy\EventBus;
 
-use BadMethodCallException;
 use Codefy\Domain\EventSourcing\DomainEvent;
 use Codefy\Domain\EventSourcing\EventStore;
 
@@ -33,7 +32,7 @@ final class CommandEventBus implements EventBus
 
     public function __clone()
     {
-        throw new BadMethodCallException(message: 'Clone is not supported.');
+        throw new \BadMethodCallException(message: 'Clone is not supported.');
     }
 
     public function subscribe(DomainEventSubscriber $subscriber): void

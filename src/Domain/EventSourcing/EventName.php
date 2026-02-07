@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Codefy\Domain\EventSourcing;
 
 use Qubus\ValueObjects\StringLiteral\StringLiteral;
-use ReflectionClass;
 
 use function Qubus\Support\Helpers\is_null__;
 
@@ -37,7 +36,7 @@ class EventName
 
     private function parseName(): StringLiteral
     {
-        $className = new ReflectionClass($this->event)->getShortName();
+        $className = new \ReflectionClass($this->event)->getShortName();
 
         return new StringLiteral($className);
     }

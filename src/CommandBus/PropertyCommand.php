@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Codefy\CommandBus;
 
 use Codefy\CommandBus\Exceptions\CommandPropertyNotFoundException;
-use ReflectionClass;
 
 use function property_exists;
 use function sprintf;
@@ -41,7 +40,7 @@ abstract class PropertyCommand implements Command
     {
         foreach ($data as $key => $value) {
             if (!property_exists($this, $key)) {
-                $command = new ReflectionClass($this)->getShortName();
+                $command = new \ReflectionClass($this)->getShortName();
                 throw new CommandPropertyNotFoundException(
                     message: sprintf(
                         '$this->%s is not a valid property in %s',
@@ -50,7 +49,7 @@ abstract class PropertyCommand implements Command
                     )
                 );
             }
-            $this->$key = $value;
+            $this->{$key} = $value;
         }
     }
 }
