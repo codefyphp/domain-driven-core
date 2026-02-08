@@ -28,9 +28,9 @@ interface DomainEvent
     /**
      * Date the event was recorded on.
      *
-     * @return ?\DateTimeInterface
+     * @return \DateTimeInterface
      */
-    public function recordedAt(): ?\DateTimeInterface;
+    public function recordedAt(): \DateTimeInterface;
 
     /**
      * Append event version.

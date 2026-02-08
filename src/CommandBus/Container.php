@@ -18,7 +18,7 @@ interface Container
     /**
      * Instantiate and return an object based on its class name.
      *
-     * @param class-string $className
+     * @param class-string|string $className
      * @return mixed
      */
     public function make(string $className): mixed;

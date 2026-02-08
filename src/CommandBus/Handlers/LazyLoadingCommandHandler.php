@@ -25,7 +25,7 @@ use function sprintf;
 readonly class LazyLoadingCommandHandler implements CommandHandler
 {
     /**
-     * @param string $handlerName
+     * @param class-string|string $handlerName
      * @param Container $container
      */
     public function __construct(public string $handlerName, public Container $container)

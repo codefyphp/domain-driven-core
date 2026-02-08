@@ -31,7 +31,7 @@ class AggregateChanged implements DomainEvent
     public ?array $payload = [];
     /** @var array<mixed>|null $metadata */
     protected ?array $metadata = [];
-    protected ?\DateTimeInterface $recordedAt = null;
+    protected \DateTimeInterface $recordedAt;
 
     /**
      * @param AggregateId $aggregateId
@@ -128,7 +128,7 @@ class AggregateChanged implements DomainEvent
     /**
      * {@inheritDoc}
      */
-    public function recordedAt(): ?\DateTimeInterface
+    public function recordedAt(): \DateTimeInterface
     {
         return $this->recordedAt;
     }
@@ -231,7 +231,7 @@ class AggregateChanged implements DomainEvent
 
     private function init(): void
     {
-        if (is_null__($this->recordedAt)) {
+        if (!isset($this->recordedAt)) {
             $this->recordedAt = $this->metadata[Metadata::RECORDED_AT] = new QubusDateTimeImmutable(
                 time: 'now',
                 tz: new QubusDateTimeZone(timezone: 'UTC')
