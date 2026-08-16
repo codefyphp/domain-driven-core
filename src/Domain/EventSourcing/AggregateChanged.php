@@ -19,8 +19,6 @@ use Codefy\Domain\Metadata;
 use Qubus\Support\DateTime\QubusDateTimeImmutable;
 use Qubus\Support\DateTime\QubusDateTimeZone;
 
-use function Qubus\Support\Helpers\is_null__;
-
 /**
  * Something that happened in the past and that is of importance to the business.
  */
@@ -72,10 +70,27 @@ class AggregateChanged implements DomainEvent
      */
     final public static function fromArray(array $data): DomainEvent
     {
+        $metadata = $data['metadata'] ?? [];
+        $aggregateId = $data['aggregateId'] ?? $metadata[Metadata::AGGREGATE_ID] ?? null;
+
+        if (!$aggregateId instanceof AggregateId) {
+            throw new \InvalidArgumentException('Event data must contain a valid aggregateId.');
+        }
+
+        if (!isset($metadata[Metadata::EVENT_ID]) && isset($data['eventId'])) {
+            $metadata[Metadata::EVENT_ID] = $data['eventId'];
+        }
+        if (!isset($metadata[Metadata::EVENT_TYPE]) && isset($data['eventType'])) {
+            $metadata[Metadata::EVENT_TYPE] = $data['eventType'];
+        }
+        if (!isset($metadata[Metadata::RECORDED_AT]) && isset($data['recordedAt'])) {
+            $metadata[Metadata::RECORDED_AT] = $data['recordedAt'];
+        }
+
         return new static(
-            aggregateId: $data['aggregateId'],
+            aggregateId: $aggregateId,
             payload: $data['payload'] ?? [],
-            metadata: $data['metadata'] ?? []
+            metadata: $metadata
         );
     }
 
@@ -231,11 +246,15 @@ class AggregateChanged implements DomainEvent
 
     private function init(): void
     {
-        if (!isset($this->recordedAt)) {
-            $this->recordedAt = $this->metadata[Metadata::RECORDED_AT] = new QubusDateTimeImmutable(
-                time: 'now',
-                tz: new QubusDateTimeZone(timezone: 'UTC')
-            );
+        $recordedAt = $this->metadata[Metadata::RECORDED_AT] ?? null;
+        if ($recordedAt instanceof \DateTimeInterface) {
+            $this->recordedAt = $recordedAt;
+            return;
         }
+
+        $this->recordedAt = $this->metadata[Metadata::RECORDED_AT] = new QubusDateTimeImmutable(
+            time: 'now',
+            tz: new QubusDateTimeZone(timezone: 'UTC')
+        );
     }
 }

@@ -34,12 +34,33 @@ class NativeContainer implements Container
 
         $parameters = $constructor->getParameters();
 
-        // Fetch each of the dependencies from the factory, and make validators
-        // via their fully namespaced name.
+        // Resolve object dependencies by their declared type. Constructor
+        // parameter names are not class names and cannot be autowired safely.
         $dependencies = [];
         foreach ($parameters as $parameter) {
-            $dependencies[] = $this->make(
-                $parameter->getName()
+            $type = $parameter->getType();
+
+            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
+                $dependencies[] = $this->make($type->getName());
+                continue;
+            }
+
+            if ($parameter->isDefaultValueAvailable()) {
+                $dependencies[] = $parameter->getDefaultValue();
+                continue;
+            }
+
+            if ($parameter->allowsNull()) {
+                $dependencies[] = null;
+                continue;
+            }
+
+            throw new \ReflectionException(
+                sprintf(
+                    'Cannot autowire parameter $%s of %s::__construct().',
+                    $parameter->getName(),
+                    $className
+                )
             );
         }
 

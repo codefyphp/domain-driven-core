@@ -29,9 +29,10 @@ trait EventProducerAware
     {
         $this->playhead += 1;
 
-        $this->recordedEvents[] = $event->withPlayhead($this->playhead);
+        $recordedEvent = $event->withPlayhead($this->playhead);
+        $this->recordedEvents[] = $recordedEvent;
 
-        $this->when($event);
+        $this->when($recordedEvent);
     }
 
     /**

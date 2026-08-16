@@ -47,7 +47,7 @@
     "test": "vendor/bin/pest",
     "cs-check": "phpcs",
     "cs-fix": "phpcbf",
-    "codestan": "phpstan analyse -l 5"
+    "codestan": "phpstan analyse src -l 5 --no-progress"
   },
   "config": {
     "optimize-autoloader": true,

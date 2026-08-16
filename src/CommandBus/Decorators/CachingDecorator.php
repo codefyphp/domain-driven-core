@@ -18,12 +18,14 @@ use Codefy\CommandBus\CacheableCommand;
 use Codefy\CommandBus\Command;
 use Codefy\CommandBus\CommandBus;
 use Codefy\CommandBus\Decorator;
+use Codefy\CommandBus\Exceptions\UnresolvableCommandHandlerException;
 use Codefy\CommandBus\HasCacheOptions;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionException;
 
-use function md5;
+use function hash;
 use function serialize;
 
 class CachingDecorator implements Decorator
@@ -35,12 +37,12 @@ class CachingDecorator implements Decorator
             get => $this->cache;
             set(CacheItemPoolInterface $value) => $this->cache = $value;
         },
-        protected int $expiresAfter {
-            get => $this->expiresAfter ?? 3600;
+        protected int $expiresAfter = 3600 {
+            get => $this->expiresAfter;
             set(int $value) => $this->expiresAfter = $value;
         },
-        protected CommandBus $innerBus {
-            get => $this->innerBus ?? new SynchronousCommandBus();
+        protected CommandBus $innerBus = new SynchronousCommandBus() {
+            get => $this->innerBus;
             set(CommandBus $value) => $this->innerBus = $value;
         }
     ) {
@@ -57,7 +59,11 @@ class CachingDecorator implements Decorator
 
     /**
      * @inheritDoc
+     * @param Command $command
+     * @return mixed
      * @throws InvalidArgumentException
+     * @throws UnresolvableCommandHandlerException
+     * @throws ReflectionException
      */
     public function execute(Command $command): mixed
     {
@@ -93,7 +99,7 @@ class CachingDecorator implements Decorator
      * Create the key to be used when saving this item to the cache pool.
      *
      * The cache item key is taken as a (string) serialized command, to ensure the return value is unique
-     * depending on the command properties; that serialized string is then md5'd to ensure it doesn't
+     * depending on the command properties; that serialized string is then hashed to ensure it doesn't
      * overflow any string length limits the implementing CacheItemPoolInterface library has.
      */
     private function getCacheKey(CacheableCommand $command): string
@@ -102,7 +108,7 @@ class CachingDecorator implements Decorator
             return $command->getCacheKey();
         }
 
-        return md5(string: serialize(value: $command));
+        return hash(algo: 'sha256', data: serialize(value: $command));
     }
 
     /**

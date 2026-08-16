@@ -21,7 +21,6 @@ use Codefy\Traits\EventSourcedAware;
 use Codefy\Traits\PublisherAware;
 use Qubus\Exception\Data\TypeException;
 
-/** @phpstan-consistent-constructor */
 class EventSourcedAggregate implements AggregateRoot, IsEventSourced
 {
     use EventProducerAware;
@@ -42,8 +41,8 @@ class EventSourcedAggregate implements AggregateRoot, IsEventSourced
      */
     protected function recordApplyAndPublishThat(DomainEvent $event): void
     {
+        $event = $event->withPlayhead($this->playhead + 1);
         $this->recordThat(event: $event);
-        $this->applyThat(event: $event);
         $this->publishThat(event: $event);
     }
 
@@ -58,8 +57,9 @@ class EventSourcedAggregate implements AggregateRoot, IsEventSourced
         return !empty($this->recordedEvents);
     }
 
-    /** {@inheritDoc}
-     * @throws TypeException
+    /**
+     * {@inheritDoc}
+     * @return DomainEvents
      */
     public function getRecordedEvents(): DomainEvents
     {
@@ -99,7 +99,7 @@ class EventSourcedAggregate implements AggregateRoot, IsEventSourced
 
     final public function equals(AggregateRoot $aggregateRoot): bool
     {
-        return $this->aggregateId() === $aggregateRoot->aggregateId();
+        return $this->aggregateId()->equals($aggregateRoot->aggregateId());
     }
 
     /**

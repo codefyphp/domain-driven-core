@@ -55,6 +55,7 @@ it('should ignore identity map if disabled.', function () use ($repository) {
     $fetchedPost2 = $repository->loadAggregateRoot(aggregateId: $post->aggregateId());
 
     Assert::assertNotSame(expected: $fetchedPost1, actual: $fetchedPost2);
+    $repository->enableIdentityMap();
 });
 
 it('should not intefere with other aggregates in pending events index.', function () use ($repository) {
@@ -99,7 +100,7 @@ it('should remove aggregate from identity map when saved.', function () use ($re
 
     $fetchedPost2 = $repository->loadAggregateRoot(aggregateId: $post->aggregateId());
 
-    Assert::assertNotSame(expected: $fetchedPost1, actual: $fetchedPost2);
+    Assert::assertSame(expected: $fetchedPost1, actual: $fetchedPost2);
 
     $fetchedPost1->changeTitle(title: new Title(value: 'Assert Equals'));
 

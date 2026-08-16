@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Codefy\Domain\EventSourcing;
 
+use ReflectionException;
+
 use function array_filter;
 use function array_map;
 use function array_merge;
@@ -44,37 +46,51 @@ abstract class DomainEventsArray implements \Countable, \IteratorAggregate
         return count($this->events);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public static function createEmpty(): static
     {
-        return new static([]);
+        return self::newCollection([]);
     }
 
     /**
      * @param array<DomainEvent> $events
+     * @return DomainEventsArray
+     * @throws ReflectionException
      */
     public static function fromArray(array $events): static
     {
-        return new static(array_values($events));
+        return self::newCollection(array_values($events));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public static function withSingleEvent(DomainEvent $event): static
     {
-        return new static([$event]);
+        return self::newCollection([$event]);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function appendEvent(DomainEvent $event): static
     {
         $events = $this->events;
         $events[] = $event;
 
-        return new static($events);
+        return self::newCollection($events);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function appendEvents(self $more): static
     {
         $events = array_merge($this->events, $more->events);
 
-        return new static($events);
+        return self::newCollection($events);
     }
 
     /**
@@ -94,6 +110,9 @@ abstract class DomainEventsArray implements \Countable, \IteratorAggregate
         return iterator_to_array(iterator: $this->getIterator());
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function map(callable $callback): static
     {
         $events = array_map(callback: $callback, array: $this->events);
@@ -101,6 +120,9 @@ abstract class DomainEventsArray implements \Countable, \IteratorAggregate
         return static::fromArray(events: $events);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function filter(callable $callback): static
     {
         $events = array_filter(array: $this->events, callback: $callback);
@@ -120,5 +142,27 @@ abstract class DomainEventsArray implements \Countable, \IteratorAggregate
     public function isEmpty(): bool
     {
         return $this->events === [];
+    }
+
+    /**
+     * Instantiate the late-static collection through reflection so extensions
+     * retain the constructor contract used by the existing collection API.
+     *
+     * @param array<DomainEvent> $events
+     * @throws \ReflectionException
+     */
+    private static function newCollection(array $events): static
+    {
+        $reflection = new \ReflectionClass(static::class);
+        $collection = $reflection->newInstanceWithoutConstructor();
+        $constructor = $reflection->getConstructor();
+
+        if (!$constructor instanceof \ReflectionMethod) {
+            throw new \LogicException('A domain event collection must define a constructor.');
+        }
+
+        $constructor->invoke($collection, $events);
+
+        return $collection;
     }
 }

@@ -12,11 +12,7 @@
     <arg value="p"/>
 
     <!-- Paths to check -->
-    <file>CommandBus</file>
-    <file>Domain</file>
-    <file>EventBus</file>
-    <file>QueryBus</file>
-    <file>Traits</file>
+    <file>src</file>
 
     <!-- Include rules from the Qubus Coding Standard -->
     <rule ref="QubusCodingStandard"/>

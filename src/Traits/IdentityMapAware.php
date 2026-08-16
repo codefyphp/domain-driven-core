@@ -33,7 +33,9 @@ trait IdentityMapAware
     public function attachToIdentityMap(RecordsEvents $aggregate): void
     {
         if (is_true__($this->enableIdentityMap)) {
-            $this->identityMap[$aggregate->aggregateId()->__toString()] = $aggregate;
+            $aggregateId = $aggregate->aggregateId();
+            $key = $aggregateId->aggregateClassName() . ':' . $aggregateId->__toString();
+            $this->identityMap[$key] = $aggregate;
         }
     }
 
@@ -44,8 +46,9 @@ trait IdentityMapAware
      */
     public function retrieveFromIdentityMap(AggregateId $aggregateId): RecordsEvents|null
     {
-        if (is_true__($this->enableIdentityMap) && isset($this->identityMap[$aggregateId->__toString()])) {
-            return $this->identityMap[$aggregateId->__toString()];
+        $key = $aggregateId->aggregateClassName() . ':' . $aggregateId->__toString();
+        if (is_true__($this->enableIdentityMap) && isset($this->identityMap[$key])) {
+            return $this->identityMap[$key];
         }
 
         return null;
@@ -69,12 +72,10 @@ trait IdentityMapAware
      */
     public function removeFromIdentityMap(RecordsEvents $aggregate): void
     {
-        if (
-            is_true__($this->enableIdentityMap) && isset(
-                $this->identityMap[$aggregate->aggregateId()->__toString()]
-            )
-        ) {
-            unset($this->identityMap[$aggregate->aggregateId()->__toString()]);
+        $aggregateId = $aggregate->aggregateId();
+        $key = $aggregateId->aggregateClassName() . ':' . $aggregateId->__toString();
+        if (is_true__($this->enableIdentityMap) && isset($this->identityMap[$key])) {
+            unset($this->identityMap[$key]);
         }
     }
 

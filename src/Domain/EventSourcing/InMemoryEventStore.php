@@ -16,7 +16,10 @@ namespace Codefy\Domain\EventSourcing;
 use Codefy\Domain\Aggregate\AggregateId;
 use Qubus\Exception\Data\TypeException;
 
+use ReflectionException;
+
 use function array_filter;
+use function array_values;
 
 final class InMemoryEventStore implements EventStore
 {
@@ -29,7 +32,9 @@ final class InMemoryEventStore implements EventStore
     }
 
     /**
-     * @throws TypeException
+     * @param DomainEvent ...$events
+     * @return Transactional
+     * @throws ReflectionException
      */
     public function commit(DomainEvent ...$events): Transactional
     {
@@ -54,12 +59,12 @@ final class InMemoryEventStore implements EventStore
     {
         $eventStream = new EventStream(
             aggregateId: $aggregateId,
-            events: array_filter(
+            events: array_values(array_filter(
                 array: $this->events,
                 callback: function (DomainEvent $event) use ($aggregateId) {
                     return $event->aggregateId()->equals($aggregateId);
                 }
-            )
+            ))
         );
 
         if ($eventStream->isEmpty()) {
@@ -78,12 +83,12 @@ final class InMemoryEventStore implements EventStore
     {
         $eventStream = new EventStream(
             aggregateId: $aggregateId,
-            events: array_filter(
+            events: array_values(array_filter(
                 array: $this->events,
                 callback: function (DomainEvent $event) use ($aggregateId, $playhead) {
                     return $event->aggregateId()->equals($aggregateId) && $playhead <= $event->playhead();
                 }
-            )
+            ))
         );
 
         if ($eventStream->isEmpty()) {

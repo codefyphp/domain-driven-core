@@ -21,14 +21,12 @@ use Codefy\QueryBus\Query;
 use Codefy\QueryBus\QueryHandler;
 use Codefy\QueryBus\QueryHandlerResolver;
 use Codefy\QueryBus\UnresolvableQueryHandlerException;
-use Qubus\Exception\Data\TypeException;
 
 use function array_pop;
 use function class_exists;
 use function explode;
 use function implode;
 use function is_callable;
-use function is_string;
 use function sprintf;
 
 class NativeQueryHandlerResolver implements QueryHandlerResolver
@@ -96,7 +94,6 @@ class NativeQueryHandlerResolver implements QueryHandlerResolver
      * @param string $queryName
      * @param callable|string|QueryHandler $handler
      * @return void
-     * @throws TypeException
      */
     public function bindHandler(string $queryName, callable|string|QueryHandler $handler): void
     {
@@ -109,17 +106,10 @@ class NativeQueryHandlerResolver implements QueryHandlerResolver
         // If the handler given is callable, wrap it up in a CallableQueryHandler for executing later.
         if (is_callable(value: $handler)) {
             $this->bindHandler($queryName, new CallableQueryHandler($handler));
+            return;
         }
 
         // If the handler given is a string, wrap it up in a LazyLoadingQueryHandler for loading later.
-        if (is_string(value: $handler)) {
-            $this->bindHandler($queryName, new LazyLoadingQueryHandler($handler, $this->container));
-        }
-
-        throw new TypeException(
-            'Could not push handler. Query Handlers should be an
-            instance of Codefy\QueryBus\QueryHandler, a callable, 
-            or a string representing a QueryHandler class.'
-        );
+        $this->bindHandler($queryName, new LazyLoadingQueryHandler($handler, $this->container));
     }
 }

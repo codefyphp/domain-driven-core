@@ -21,7 +21,10 @@ trait EventSourcedRepositoryAware
      */
     public function loadAggregateRoot(AggregateId $aggregateId): RecordsEvents
     {
-        $this->retrieveFromIdentityMap($aggregateId);
+        $eventSourcedAggregate = $this->retrieveFromIdentityMap($aggregateId);
+        if ($eventSourcedAggregate instanceof RecordsEvents) {
+            return $eventSourcedAggregate;
+        }
 
         $aggregateRootClassName = $aggregateId->aggregateClassName();
 

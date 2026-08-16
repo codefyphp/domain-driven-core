@@ -10,12 +10,7 @@
   </testsuites>
   <source>
     <include>
-      <directory>./CommandBus</directory>
-      <directory>./Domain</directory>
-      <directory>./EventBus</directory>
-      <directory>./Factory</directory>
-      <directory>./QueryBus</directory>
-      <directory>./Traits</directory>
+      <directory>./src</directory>
     </include>
   </source>
 </phpunit>

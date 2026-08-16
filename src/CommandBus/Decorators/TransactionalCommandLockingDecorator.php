@@ -60,13 +60,15 @@ class TransactionalCommandLockingDecorator implements Decorator
 
         $this->locked = true;
 
-        $response = $this->executeIgnoringLock(command: $command);
+        try {
+            $response = $this->executeIgnoringLock(command: $command);
+            $this->executeQueue();
 
-        $this->executeQueue();
-
-        $this->locked = false;
-
-        return $response;
+            return $response;
+        } finally {
+            $this->queue = [];
+            $this->locked = false;
+        }
     }
 
     /**
@@ -85,7 +87,7 @@ class TransactionalCommandLockingDecorator implements Decorator
      */
     protected function executeQueue(): void
     {
-        foreach ($this->queue as $command) {
+        while (($command = array_shift($this->queue)) instanceof Command) {
             $this->executeIgnoringLock(command: $command);
         }
     }
